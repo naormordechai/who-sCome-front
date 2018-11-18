@@ -1,0 +1,3 @@
+export {
+    loadRooms
+} from './room'
