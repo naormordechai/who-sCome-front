@@ -6,6 +6,26 @@ const styles = {
     container: {
         padding: '6px',
     },
+    containerList: {
+        height: 'calc(100vh - 300px)',
+        overflowY: 'scroll',
+        padding:'0 5px',
+        '&::-webkit-scrollbar': {
+            width: '10px',
+        },
+        '&::-webkit-scrollbar-track' : {
+            borderRadius:'5px',
+            background: '#000'
+        },
+        '&::-webkit-scrollbar-thumb':{
+            borderRadius:'5px',
+            background: '#888'
+        },
+        '&::-webkit-scrollbar-thumb:hover':{
+            background: '#555'
+        }
+    },
+
     inputSearch: {
         borderRadius: '1000px',
         outline: 'none',
@@ -27,8 +47,10 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         margin: '0 8px',
-        color:'#fff',
-        textDecoration:'none'
+        padding: '10px 0',
+        color: '#fff',
+        textDecoration: 'none',
+        borderBottom: '2px solid #000'
     },
 }
 
@@ -57,9 +79,11 @@ const RoomList = ({ rooms, classes }) => (
             <div>Name</div>
             <div>Players</div>
         </div>
-        {rooms.map(room => (
-                <RoomPreview key={room._id} room={room} subHeader={classes.subHeader}/>
-        ))}
+        <div className={classes.containerList}>
+            {rooms.map(room => (
+                <RoomPreview key={room._id} room={room} subHeader={classes.subHeader} />
+            ))}
+        </div>
     </div>
 )
 

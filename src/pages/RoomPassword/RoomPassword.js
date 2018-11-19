@@ -10,7 +10,7 @@ const styles = {
         margin: 'auto',
         padding: '7px',
         borderRadius: '5px',
-        transform: 'translate(0, 100%)', // needed
+        transform: 'translate(0, 50px)', // needed
     },
     wrongPassword: {
         display: 'block',
@@ -37,7 +37,8 @@ const styles = {
             outline: 'none',
             textAlign: 'center',
             color: '#fff',
-            fontSize: '15px'
+            fontSize: '15px',
+            width:'100%'
         }
     },
     containerBtns: {

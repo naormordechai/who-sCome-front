@@ -1,7 +1,8 @@
 import * as actionTypes from '../actions/actionTypes'
 import { updateState } from '../utility'
 const initialState = {
-    rooms: []
+    rooms: [],
+    isExsistRoom: true
 };
 
 const reducer = (state = initialState, action) => {
@@ -10,6 +11,16 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 rooms: state.rooms.concat(action.rooms)
+            }
+        case actionTypes.ADD_ROOM:
+            return {
+                ...state,
+                rooms: state.rooms.concat(action.room)
+            }
+        case actionTypes.EXSIST_ROOM:
+            return {
+                ...state,
+                isExsistRoom: action.exsist
             }
     }
     return state

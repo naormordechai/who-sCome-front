@@ -10,5 +10,30 @@ const _loadRooms = (rooms) => {
 
 export const loadRooms = () => dispatch => {
     RoomService.query()
-    .then(({ data }) => dispatch(_loadRooms(data)))
+        .then(({ data }) => dispatch(_loadRooms(data)))
+}
+
+const _addRoom = (room) => {
+    return {
+        type: actionTypes.ADD_ROOM,
+        room
+    }
+}
+
+const _updateIsExsistRoom = (exsist) => {
+    return {
+        type: actionTypes.EXSIST_ROOM,
+        exsist
+    }
+}
+
+export const addRoom = (room) => dispatch => {
+    RoomService.addRoom(room)
+        .then(({ data }) => {
+            if (!data) {
+                return dispatch(_updateIsExsistRoom(data))
+            } else {
+                return dispatch(_addRoom(data))
+            }
+        })
 }

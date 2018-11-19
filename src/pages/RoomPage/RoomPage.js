@@ -29,7 +29,7 @@ const styles = {
     },
     container: {
         maxWidth: '750px',
-        margin: '100px auto'
+        margin: '50px auto'
     }
 }
 

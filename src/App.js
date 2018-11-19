@@ -15,6 +15,7 @@ import RoomPage from './pages/RoomPage/RoomPage'
 import RoomPassword from './pages/RoomPassword/RoomPassword'
 import RoomDetails from './pages/RoomDetails/RoomDetails'
 import CreateRoom from './pages/CreateRoom/CreateRoom'
+import Card from './components/Card/Card'
 import './App.css';
 
 const styles = {

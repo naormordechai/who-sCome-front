@@ -1,3 +1,4 @@
 export {
-    loadRooms
+    loadRooms,
+    addRoom,
 } from './room'

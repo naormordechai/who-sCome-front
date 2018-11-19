@@ -15,8 +15,13 @@ async function checkPassword(roomInfo) {
     return await axios.post(`${ROOM_URL}/checkPassword`, roomInfo)
 }
 
+async function addRoom(room) {
+    return await axios.post(`${ROOM_URL}/addRoom`, room)
+}
+
 export default {
     query,
     getById,
-    checkPassword
+    checkPassword,
+    addRoom
 }
