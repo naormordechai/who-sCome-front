@@ -13,11 +13,20 @@ class CreateRoom extends React.Component {
                 maxPlayers: 0,
                 persons: []
             },
-            currentId: ''
+            requestedNames: [],
+            isDisabled: true,
+            requestedRoom: {}
         }
     }
 
-    handlerText = (e) => {
+    handlerText = (e, textInput) => {
+        var isDisabled;
+        const requestedNames = this.props.rooms.filter(room => room.roomName === e.target.value);
+        if (requestedNames.length || !e.target.value.length) {
+            isDisabled = true
+        } else {
+            isDisabled = false
+        }
         this.setState({
             ...this.state,
             room: {
@@ -25,7 +34,9 @@ class CreateRoom extends React.Component {
                 password: this.state.room.password,
                 maxPlayers: this.state.room.maxPlayers,
                 persons: this.state.room.persons
-            }
+            },
+            requestedNames,
+            isDisabled
         })
     }
 
@@ -53,6 +64,15 @@ class CreateRoom extends React.Component {
         })
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const requestedRoom = this.props.rooms.find(room => room.roomName === this.state.room.roomName)
+        if (prevProps.rooms.length !== this.props.rooms.length && this.props.history.action !== 'POP') {
+            this.props.history.push(`/room/${requestedRoom._id}`)
+        } else if (this.props.history.action === 'POP' && this.props.rooms.length === prevProps.rooms.length + 1) {
+            this.props.history.push(`/room/${requestedRoom._id}`)
+        }
+    }
+
     addRoom = () => {
         this.props.onAddRoom(this.state.room)
     }
@@ -62,7 +82,6 @@ class CreateRoom extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <Card data={{
@@ -75,6 +94,10 @@ class CreateRoom extends React.Component {
                     handlerMaxPlayers={this.handlerMaxPlayers}
                     handlerPositiveRequest={this.addRoom}
                     handlerNegativeRequest={this.goBack}
+                    validateText={this.state.requestedNames}
+                    validateLengthText={this.state.room.roomName}
+                    isDisabled={this.state.isDisabled}
+                    marginTop={25}
                 >
                 </Card>
             </div>

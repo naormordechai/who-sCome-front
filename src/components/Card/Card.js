@@ -8,8 +8,9 @@ const styles = {
         margin: 'auto',
         padding: '7px',
         borderRadius: '5px',
-        transform: 'translate(0,50px)'
+        transform: 'translate(0,50px)',
     },
+
     title: {
         borderBottom: '5px solid rgb(172,50,51)',
         fontSize: '22px',
@@ -25,7 +26,7 @@ const styles = {
         marginBottom: '5px',
         justifyContent: 'space-between',
         '& label:first-child': {
-            marginLeft: '5px'
+            marginLeft: '5px',
         },
         '& input': {
             backgroundColor: 'rgb(17,22,25)',
@@ -40,25 +41,24 @@ const styles = {
         }
     },
     submit: {
-        backgroundColor: 'inherit',
         border: '0',
-        outline: 'none',
-        color: '#fff',
         fontWeight: '700',
+        width: '100%',
         height: '100%',
         fontSize: '17px',
+        borderRadius: '5px',
+        outline: 'none',
         cursor: 'pointer',
-        width: '100%'
     },
     containerBtns: {
         display: 'flex',
         marginTop: '10px',
         textAlign: 'center',
-        cursor: 'pointer',
         fontWeight: '700',
         height: '30px',
         '& div': {
             borderRadius: '5px',
+            width: '50%',
             transition: '.3s',
             '& span': {
                 height: '100%',
@@ -67,9 +67,10 @@ const styles = {
         },
         '& div:first-child': {
             flex: '0 0 50%',
+            cursor: 'pointer',
             backgroundColor: 'rgb(36,73,103)',
             marginRight: '5px',
-            fontSize: '17px'
+            fontSize: '17px',
         },
         '& div:last-child': {
             flex: '1',
@@ -82,8 +83,17 @@ const styles = {
             backgroundColor: 'rgb(62,62,62,0.5)',
         },
         '& div:active': {
-            transform: 'scale(.9)',
             outline: 'none',
+        },
+    },
+    '@media (max-width:500px)': {
+        containerBtns: {
+            '& div:first-child': {
+                cursor: 'auto'
+            },
+        },
+        submit: {
+            cursor: 'auto'
         }
     }
 }
@@ -93,17 +103,33 @@ const onSubmit = (e, callBack) => {
     callBack()
 }
 
+
+
 const card = ({ classes, data, handlerText, hanlderPassword,
-    handlerMaxPlayers, handlerPositiveRequest, handlerNegativeRequest }) => (
+    handlerMaxPlayers, handlerPositiveRequest, handlerNegativeRequest,
+    validateText, validateLengthText, isDisabled, marginTop }) => {
+    let textInput = React.createRef();
+    const validateRoomName = (isExsistRoomName, lengthTextRoomName, textInput) => {
+        if (lengthTextRoomName) {
+            if (isExsistRoomName.length) {
+                return (
+                    <div style={{ position: 'absolute', top: '40px', left: '52px', color: 'red', fontWeight: '700' }}>the name is already taken</div>
+                )
+            }
+        }
+    }
+
+    return (
         <form onSubmit={(e) => onSubmit(e, handlerPositiveRequest)}>
             <div className={classes.container}>
                 <div className={classes.title}>{data.header}</div>
-                <div className={classes.boxPassword}>
+                <div>{validateRoomName(validateText, validateLengthText, textInput)}</div>
+                <div className={classes.boxPassword} style={marginTop ? { marginTop: '25px' } : { marginTop: '0' }}>
                     <div>
                         <label>{data.title1}</label>
                     </div>
                     <div>
-                        <input required type="text" onChange={handlerText} />
+                        <input required type="text" onChange={(e) => handlerText(e, textInput)} />
                     </div>
                 </div>
                 <div className={classes.boxPassword}>
@@ -126,12 +152,19 @@ const card = ({ classes, data, handlerText, hanlderPassword,
                     <div onClick={handlerNegativeRequest}>
                         <span>Cancel</span>
                     </div>
-                    <div>
-                        <span><input className={classes.submit} type="submit" value="Create" /></span>
-                    </div>
+                    {/* {console.log('asddse',validateLengthText)} */}
+                    {/* {validateLengthText.length ? console.log(1) : console.log(0)} */}
+                    {isDisabled ?
+                        <input type="submit" className={classes.submit} ref={textInput} disabled={isDisabled} /> :
+                        <input type="submit" className={classes.submit} ref={textInput} disabled={isDisabled} />}
+                    {/* <div>
+                        <input ref={textInput} className={`${classes.submit}`} type="submit" value="Create" />
+                    </div> */}
                 </div>
             </div>
         </form>
     )
+}
+
 
 export default injectSheet(styles)(card)
