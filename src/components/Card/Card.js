@@ -152,14 +152,9 @@ const card = ({ classes, data, handlerText, hanlderPassword,
                     <div onClick={handlerNegativeRequest}>
                         <span>Cancel</span>
                     </div>
-                    {/* {console.log('asddse',validateLengthText)} */}
-                    {/* {validateLengthText.length ? console.log(1) : console.log(0)} */}
                     {isDisabled ?
-                        <input type="submit" className={classes.submit} ref={textInput} disabled={isDisabled} /> :
-                        <input type="submit" className={classes.submit} ref={textInput} disabled={isDisabled} />}
-                    {/* <div>
-                        <input ref={textInput} className={`${classes.submit}`} type="submit" value="Create" />
-                    </div> */}
+                        <input type="submit" value="Create" className={classes.submit} ref={textInput} disabled={isDisabled} /> :
+                        <input type="submit" value="Create" className={classes.submit} ref={textInput} disabled={isDisabled} />}
                 </div>
             </div>
         </form>

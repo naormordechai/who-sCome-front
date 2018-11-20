@@ -66,7 +66,7 @@ const infRooms = (rooms) => {
     }
 }
 
-const RoomList = ({ rooms, classes }) => (
+const RoomList = ({ rooms, classes, history }) => (
     <div className={classes.container}>
         <div className={classes.header}>
             <div>Room list</div>
@@ -81,7 +81,7 @@ const RoomList = ({ rooms, classes }) => (
         </div>
         <div className={classes.containerList}>
             {rooms.map(room => (
-                <RoomPreview key={room._id} room={room} subHeader={classes.subHeader} />
+                <RoomPreview key={room._id} room={room} subHeader={classes.subHeader} history={history}/>
             ))}
         </div>
     </div>

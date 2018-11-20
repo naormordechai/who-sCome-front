@@ -43,7 +43,7 @@ class RoomPage extends React.Component {
 
 
     render() {
-        const { classes, rooms } = this.props;
+        const { classes, rooms, history } = this.props;
         return (
             <div className={classes.container}>
                 <div className={classes.btnsContainer}>
@@ -52,7 +52,7 @@ class RoomPage extends React.Component {
                     <div onClick={this.goToCreateRoom}>Create Room</div>
                 </div>
                 <div className={classes.dialog}>
-                    <RoomList rooms={rooms} />
+                    <RoomList rooms={rooms} history={history}/>
                 </div>
             </div>
         )

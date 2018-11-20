@@ -16,7 +16,7 @@ const styles = {
         padding: '10px',
         boxShadow: '1px 2px 1px #000',
         borderRadius: '5px',
-        top: '5%',
+        top: '30%',
         width: '300px',
         backgroundColor: 'rgb(26,33,37)',
         margin: 'auto',
@@ -59,10 +59,10 @@ class errorPassword extends React.Component {
     render() {
         const { classes } = this.props
         return (
-            <div ref={e => this.containerRef = e} className={classes.container}>
+            <div onClick={this.openRef} ref={e => this.containerRef = e} className={classes.container}>
                 <div className={classes.boxErrorPassword}>
                     <div>WRONG PASSWORD</div>
-                    <div className={classes.tryAgain} onClick={this.openRef}>TRY AGAIN</div>
+                    <div className={classes.tryAgain}>TRY AGAIN</div>
                 </div>
             </div>
         )
