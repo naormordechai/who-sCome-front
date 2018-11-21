@@ -1,6 +1,7 @@
 import React from 'react'
 import RoomService from '../../services/RoomService'
 import WrongPassword from '../../components/WrongPassword/WrongPassword'
+import StorageService from '../../services/StorageService'
 import injectSheet from 'react-jss'
 
 const styles = {
@@ -38,7 +39,7 @@ const styles = {
             textAlign: 'center',
             color: '#fff',
             fontSize: '15px',
-            width:'100%'
+            width: '100%'
         }
     },
     containerBtns: {
@@ -118,13 +119,13 @@ class RoomPassword extends React.Component {
             .then(({ data }) => {
                 if (!data) {
                     this.passwordRef.value = ''
-                    this.isWrong = true
                     this.setState({
                         ...this.state,
                         isWrong: true
                     })
                     return
                 }
+                StorageService.store(`${this.state.roomInfo._id}`,this.state.roomInfo._id )
                 this.props.history.push(`/room/${this.state.roomInfo._id}`)
             })
     }
@@ -134,6 +135,7 @@ class RoomPassword extends React.Component {
             ...this.state,
             isWrong: false
         })
+        this.passwordRef.focus()
     }
 
     handlerCancel = () => this.props.history.push('/')
@@ -154,7 +156,7 @@ class RoomPassword extends React.Component {
                             <label>Password:</label>
                         </div>
                         <div>
-                            <input ref={e => this.passwordRef = e} onChange={this.onChange} type="password" />
+                            <input ref={e => this.passwordRef = e} onChange={this.onChange} type="password" autoFocus />
                         </div>
                     </div>
                     <div className={classes.containerBtns}>

@@ -13,6 +13,18 @@ export const loadRooms = () => dispatch => {
         .then(({ data }) => dispatch(_loadRooms(data)))
 }
 
+const _updateRoom = (room) => {
+    return {
+        type: actionTypes.UPDATE_ROOM,
+        room
+    }
+}
+
+export const updateRoom = (room) => dispatch => {
+    RoomService.updateRoom(room)
+    .then(res => console.log('res', res))
+}
+
 const _addRoom = (room) => {
     return {
         type: actionTypes.ADD_ROOM,

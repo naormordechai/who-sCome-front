@@ -14,11 +14,10 @@ const styles = {
         display: 'none',
         fontWeight: 500,
         fontSize: '18px',
-        padding: '0 7px'
+        padding: '0 7px',
     },
     containerBtns: {
         width: '250px',
-        height: '100px',
         backgroundColor: 'rgb(100,100,100)',
         boxShadow:'1px 2px 1px #000',
         display: 'flex',
@@ -42,6 +41,10 @@ const styles = {
         '& div:first-child': {
             backgroundColor: 'rgb(36,73,103)',
         }
+    },
+    active:{
+        transition:'.3s',
+        visibility: 'visible'
     }
 }
 
@@ -60,7 +63,7 @@ const roomPreview = ({ room, history, classes, subHeader }) => {
 
     let dialog = React.createRef();
 
-    const openDialog = (e) => {
+    const openDialog = (classes) => {
         dialog.current.style.display = 'block'
     }
 
@@ -75,7 +78,7 @@ const roomPreview = ({ room, history, classes, subHeader }) => {
     }
     return (
 
-        <div onClick={openDialog} className={subHeader}>
+        <div onClick={() => openDialog(classes)} className={subHeader}>
             <div ref={dialog} className={classes.dialog} onClick={goBack}>
                 <div className={classes.containerBtns}>
                     <div style={{ textAlign: 'center' }}>go to <span style={{ color: '#000', 

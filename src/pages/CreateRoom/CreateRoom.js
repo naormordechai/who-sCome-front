@@ -1,5 +1,6 @@
 import React from 'react'
 import Card from '../../components/Card/Card'
+import StorageService from '../../services/StorageService'
 import * as actionCreators from '../../store/actions/index'
 import { connect } from 'react-redux'
 
@@ -67,8 +68,10 @@ class CreateRoom extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         const requestedRoom = this.props.rooms.find(room => room.roomName === this.state.room.roomName)
         if (prevProps.rooms.length !== this.props.rooms.length && this.props.history.action !== 'POP') {
+            StorageService.store(requestedRoom._id, requestedRoom._id)
             this.props.history.push(`/room/${requestedRoom._id}`)
         } else if (this.props.history.action === 'POP' && this.props.rooms.length === prevProps.rooms.length + 1) {
+            StorageService.store(requestedRoom._id, requestedRoom._id)
             this.props.history.push(`/room/${requestedRoom._id}`)
         }
     }

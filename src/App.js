@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss'
 import * as actionCreators from './store/actions/index'
+import StorageService from './services/StorageService'
 import RoomService from './services/RoomService'
 import { connect } from 'react-redux'
 import { compose } from 'redux'

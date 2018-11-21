@@ -5,6 +5,7 @@ import injectSheet from 'react-jss'
 const styles = {
     container: {
         padding: '6px',
+        // cursor:'pointer' // im media query
     },
     containerList: {
         height: 'calc(100vh - 300px)',
@@ -50,7 +51,7 @@ const styles = {
         padding: '10px 0',
         color: '#fff',
         textDecoration: 'none',
-        borderBottom: '2px solid #000'
+        borderBottom: '2px solid #000',
     },
 }
 

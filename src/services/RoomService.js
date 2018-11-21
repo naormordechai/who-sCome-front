@@ -19,9 +19,14 @@ async function addRoom(room) {
     return await axios.post(`${ROOM_URL}/addRoom`, room)
 }
 
+async function updateRoom(room) {
+    return await axios.put(`${ROOM_URL}/${room._id}`, room)
+}
+
 export default {
     query,
     getById,
     checkPassword,
-    addRoom
+    addRoom,
+    updateRoom
 }
