@@ -18,7 +18,8 @@ const styles = {
     },
     containerBtns: {
         width: '250px',
-        backgroundColor: 'rgb(100,100,100)',
+        height:'100px',
+        backgroundColor: 'rgba(100,100,100, .5)',
         boxShadow:'1px 2px 1px #000',
         display: 'flex',
         flexDirection: 'column',
@@ -26,6 +27,7 @@ const styles = {
         transform: 'translate(0, 212%)',
         margin: '0 auto',
         borderRadius: '5px',
+
     },
     btns: {
         display: 'flex',

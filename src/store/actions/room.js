@@ -22,7 +22,9 @@ const _updateRoom = (room) => {
 
 export const updateRoom = (room) => dispatch => {
     RoomService.updateRoom(room)
-    .then(res => console.log('res', res))
+        .then(({ data }) => {
+            dispatch(_updateRoom(data))
+        })
 }
 
 const _addRoom = (room) => {

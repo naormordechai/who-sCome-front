@@ -88,7 +88,7 @@ class RoomPage extends React.Component {
 
     getCurrentRooms = (e) => {  // onchange for filter rooms in a search input
         const newRooms = [...this.props.rooms].filter(room => {
-            return room.roomName.toLocaleLowerCase().includes(e.target.value)
+            return room.roomName.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())
         })
         this.setState({
             newRooms,

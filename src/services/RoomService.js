@@ -23,10 +23,20 @@ async function updateRoom(room) {
     return await axios.put(`${ROOM_URL}/${room._id}`, room)
 }
 
+function getRoomEmpty() {
+    return {
+        roomName: '',
+        password: '',
+        maxPlayers: 0,
+        persons: []
+    }
+}
+
 export default {
     query,
     getById,
     checkPassword,
     addRoom,
-    updateRoom
+    updateRoom,
+    getRoomEmpty
 }

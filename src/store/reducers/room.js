@@ -22,6 +22,14 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isExsistRoom: action.exsist
             }
+        case actionTypes.UPDATE_ROOM:
+            const requestedRoomIndex = state.rooms.findIndex(room => room._id === action.room._id);
+            const copyRooms = [...state.rooms]
+            copyRooms[requestedRoomIndex] = action.room;
+            return {
+                ...state,
+                rooms: copyRooms
+            }
     }
     return state
 }
