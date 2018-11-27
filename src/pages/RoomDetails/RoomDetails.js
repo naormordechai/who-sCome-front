@@ -223,12 +223,7 @@ class RoomDetails extends React.Component {
     hanlderRefresh = () => window.location.reload()
 
 
-    handlerBack = () => {
-        this.state.socket.disconnect();
-          console.log('x');
-          
-        // this.props.history.push('/')
-    } 
+    handlerBack = () =>  this.props.history.push('/')
 
 
     updatePerson = (e) => {
