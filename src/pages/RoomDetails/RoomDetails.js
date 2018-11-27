@@ -113,7 +113,7 @@ class RoomDetails extends React.Component {
             },
             disabled: true,
             personFromStorage: {},
-            socket: io.connect('http://localhost:8080/'),
+            socket: io.connect(),
             isDialog: false,
             requestedPerson: {}
         }
