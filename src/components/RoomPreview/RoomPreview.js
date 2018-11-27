@@ -18,14 +18,15 @@ const styles = {
         padding: '0 7px',
     },
     containerBtns: {
-        width: '250px',
-        height: '100px',
+        width: '350px',
+        padding: '30px 20px',
         backgroundColor: 'rgba(100,100,100, .5)',
         boxShadow: '1px 2px 1px #000',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
-        transform: 'translate(0, 212%)',
+        transform: 'translate(0, 100px)',
+        wordBreak: 'break-all',
         margin: '0 auto',
         borderRadius: '5px',
 
@@ -34,6 +35,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        marginTop: '20px',
         '& div': {
             borderRadius: '5px',
             padding: '5px 15px'
@@ -48,6 +50,11 @@ const styles = {
     active: {
         transition: '.3s',
         visibility: 'visible'
+    },
+    '@media(max-width:400px)': {
+        containerBtns: {
+            width: '100%'
+        }
     }
 }
 
@@ -73,6 +80,9 @@ class roomPreview extends React.Component {
         e.stopPropagation()
         history.push(`/enter password/${this.props.room._id}`)
     }
+
+    // render persons => Its purpose is
+    // if i belong to any room in the list i'll see it in => opacity = 0.5
 
     renderPersons = (room, classes, subHeader, history) => {
         if (room.persons.length === room.maxPlayers && StorageService.load(`pesronIn${room._id}`)) {
@@ -139,7 +149,7 @@ class roomPreview extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div>{room.roomName}</div>
+                    <div style={{ wordBreak: 'break-all', width: '65%' }}>{room.roomName}</div>
                     <div>{room.persons.length}/{room.maxPlayers}</div>
                 </div>
             )
@@ -150,7 +160,7 @@ class roomPreview extends React.Component {
         const { room, history, classes, subHeader } = this.props
         return (
             <div>
-                {this.renderPersons(room, classes, subHeader,history)}
+                {this.renderPersons(room, classes, subHeader, history)}
             </div>
         )
     }

@@ -113,7 +113,9 @@ const card = ({ classes, data, handlerText, hanlderPassword,
         if (lengthTextRoomName) {
             if (isExsistRoomName.length) {
                 return (
-                    <div style={{ position: 'absolute', top: '40px', left: '52px', color: 'red', fontWeight: '700' }}>the name is already taken</div>
+                    <div style={{ position: 'absolute', top: '40px', left: '52px', color: 'red', fontWeight: '700' }}>
+                        the name is already taken
+                    </div>
                 )
             }
         }

@@ -1,6 +1,6 @@
 import React from 'react'
 import RoomService from '../../services/RoomService'
-import WrongPassword from '../../components/WrongPassword/WrongPassword'
+import Dialog from '../../components/Dialog/Dialog'
 import StorageService from '../../services/StorageService'
 import injectSheet from 'react-jss'
 
@@ -162,7 +162,12 @@ class RoomPassword extends React.Component {
         return (
             <div>
                 <div className={classes.wrongPassword}>
-                    <WrongPassword wrong={isWrong} closeDialog={this.closeDialog} />
+                    <Dialog
+                     wrong={isWrong} 
+                     closeDialog={this.closeDialog} 
+                     title="WRONG PASSWORD"
+                     onCancel="TRY AGAIN"
+                     />
                 </div>
                 <div className={classes.container}>
                     <div className={classes.title}>Password required</div>

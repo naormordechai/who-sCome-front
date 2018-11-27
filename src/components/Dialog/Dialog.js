@@ -3,6 +3,8 @@ import injectSheet from 'react-jss'
 
 const styles = {
     container: {
+        top: '0',
+        left: '0',
         height: '100%',
         width: '100%',
         position: 'fixed',
@@ -36,14 +38,14 @@ const styles = {
         width: '50%',
         margin: '0 auto',
         borderRadius: '5px',
-        '&:hover':{
-            opacity:'.7'
+        '&:hover': {
+            opacity: '.7'
         }
     }
 }
 
 
-class errorPassword extends React.Component {
+class Dialog extends React.Component {
 
     openRef = () => {
         this.containerRef.style.transform = 'translate(-100%, 0)'
@@ -57,16 +59,17 @@ class errorPassword extends React.Component {
     }
 
     render() {
-        const { classes } = this.props
+        const { classes, yes, title, onCancel, onAccept } = this.props
         return (
             <div onClick={this.openRef} ref={e => this.containerRef = e} className={classes.container}>
                 <div className={classes.boxErrorPassword}>
-                    <div>WRONG PASSWORD</div>
-                    <div className={classes.tryAgain}>TRY AGAIN</div>
+                    <div>{title}</div>
+                    <div className={classes.tryAgain}>{onCancel}</div>
+                    {onAccept ? <div style={{marginTop:'20px', background:'red'}} className={classes.tryAgain} onClick={yes}>{onAccept}</div> : null }
                 </div>
             </div>
         )
     }
 }
 
-export default injectSheet(styles)(errorPassword)
+export default injectSheet(styles)(Dialog)

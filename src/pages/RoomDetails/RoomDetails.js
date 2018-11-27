@@ -11,6 +11,7 @@ import StorageService from '../../services/StorageService'
 import InputComponent from '../../components/InputComponent/InputComponent'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { IoIosTrash } from "react-icons/io";
+import Dialog from '../../components/Dialog/Dialog'
 import io from 'socket.io-client'
 import 'react-notifications/lib/notifications.css';
 
@@ -112,7 +113,9 @@ class RoomDetails extends React.Component {
             },
             disabled: true,
             personFromStorage: {},
-            socket: io.connect()
+            socket: io.connect('http://localhost:8080/'),
+            isDialog: false,
+            requestedPerson: {}
         }
     }
 
@@ -125,9 +128,7 @@ class RoomDetails extends React.Component {
                     }, 1000);
                     break;
                 case 'success':
-                    setTimeout(() => {
-                        NotificationManager.success('Success message', 'Title here');
-                    }, 1000);
+                    NotificationManager.success('Success message', 'Title here');
                     break;
                 case 'warning':
                     NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
@@ -155,22 +156,34 @@ class RoomDetails extends React.Component {
             })
     }
 
-    async componentDidMount() {
-        await this.validateRoomPassword()
+    handlerPersonFromStorage = async () => {
         if (localStorage.getItem(`pesronIn${this.props.match.params.id}`)) {
-            this.setState({
+            await this.setState({
                 ...this.state,
                 personFromStorage: StorageService.load(`pesronIn${this.props.match.params.id}`)
             })
         }
         if (this.state.room.persons.length >= this.state.room.maxPlayers) {
-            this.setState({
+            await this.setState({
                 ...this.state,
                 disabled: true
             })
         }
     }
 
+    componentDidMount() {
+        this.handlerPersonFromStorage()
+        // await this.validateRoomPassword()
+        // this.handlerPersonFromStorage()
+        
+    }
+    
+    componentWillMount() {
+        this.validateRoomPassword()
+    }
+    // if (this.roomNameRef.innerText.length >= 32) {
+    //     this.roomNameRef.style.overflowX = 'scroll'
+    // }
 
     validationDisabledBtn = () => {
         if (StorageService.load(`pesronIn${this.props.match.params.id}`)) {
@@ -181,8 +194,6 @@ class RoomDetails extends React.Component {
             return
         }
         if (this.state.person.name.length && this.state.room.persons.length !== this.state.room.maxPlayers) {
-            console.log('xxxxx');
-
             this.setState({
                 ...this.state,
                 disabled: false
@@ -196,7 +207,6 @@ class RoomDetails extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(this.state);
         if ((this.state.person.name !== prevState.person.name && this.state.room.persons.length < this.state.room.maxPlayers)
             || (this.state.room.persons.length !== prevState.room.persons.length)) {
             this.validationDisabledBtn()
@@ -210,14 +220,15 @@ class RoomDetails extends React.Component {
     }
 
 
-    hanlderRefresh = () => {
-        window.location.reload()
-    }
+    hanlderRefresh = () => window.location.reload()
+
 
     handlerBack = () => {
-        this.props.history.push('/')
-    }
-
+        this.state.socket.disconnect();
+          console.log('x');
+          
+        // this.props.history.push('/')
+    } 
 
 
     updatePerson = (e) => {
@@ -230,8 +241,17 @@ class RoomDetails extends React.Component {
         })
     }
 
+    handlerOpenDialog = (person) => {
+        this.setState({
+            ...this.state,
+            isDialog: true,
+            requestedPerson: person
+        })
+    }
+
 
     addPerson = async (ref) => {
+
         ref.current.value = ''
         const person = {
             name: this.state.person.name,
@@ -253,6 +273,7 @@ class RoomDetails extends React.Component {
         })
         this.props.onAddPerson(this.state.room)
         this.state.socket.emit('updatedroom', this.state.room)
+        return this.createNotification('success')()
     }
 
     handlerDeltePerson = async (person) => {
@@ -271,11 +292,32 @@ class RoomDetails extends React.Component {
         this.state.socket.emit('updatedroom', this.state.room)
     }
 
+    handlerYes = (e) => {
+        e.stopPropagation()
+        this.handlerDeltePerson(this.state.requestedPerson)
+        window.location.href = '/'
+    }
+
+    handlerCloseDialog = () => {
+        this.setState({
+            ...this.state,
+            isDialog: false
+        })
+    }
+
     render() {
         const { classes } = this.props
         const { room } = this.state
         return (
             <div className={classes.container}>
+                <Dialog
+                    wrong={this.state.isDialog}
+                    closeDialog={this.handlerCloseDialog}
+                    yes={this.handlerYes}
+                    title="Are You Sure?"
+                    onCancel="No, Back To List."
+                    onAccept="Yes"
+                />
                 <InputComponent
                     width="100%"
                     placeholder="add you to the list..."
@@ -289,7 +331,7 @@ class RoomDetails extends React.Component {
                     title="Back To Home"
                     action={this.handlerBack} />
                 <div className={classes.containerDetails}>
-                    <div className={classes.title}>{room.roomName}</div>
+                    <div ref={e => this.roomNameRef = e} className={classes.title}>{room.roomName}</div>
                     <div className={classes.header}>
                         <div>Person List</div>
                         <div>{room.persons.length}/{room.maxPlayers}</div>
@@ -304,7 +346,8 @@ class RoomDetails extends React.Component {
                                 {this.state.personFromStorage.name === person.name &&
                                     this.state.personFromStorage.addedAt === person.addedAt ?
                                     <div className={classes.person}>
-                                        <div><IoIosTrash onClick={() => this.handlerDeltePerson(person)} /></div>
+                                        <div><IoIosTrash onClick={() => this.handlerOpenDialog(person)} /></div>
+                                        {/* <div><IoIosTrash onClick={() => this.handlerDeltePerson(person)} /></div> */}
                                         <div>{person.name}</div>
                                     </div>
                                     : <div>{person.name}</div>}

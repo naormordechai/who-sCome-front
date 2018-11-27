@@ -21,25 +21,43 @@ const styles = {
         }
 
     },
+    selecet: {
+        outline: 'none',
+        textAlignLast: 'center',
+        backgroundColor: 'rgb(62,62,62)',
+        borderRadius:'5px',
+        color:'#fff',
+        fontWeight:'600'
+    },
     '@media(max-width:400px)': {
         btnsContainer: {
             fontSize: '3.3vw',
             '& > *': {
                 height: '7vw',
-                cursor:'auto'
+                cursor: 'auto'
             }
         },
+        selecet: {
+            fontSize: '3.3vw',
+            padding: '0'
+        }
     },
+
 }
 
 class BtnsContainer extends Component {
 
     render() {
-        const { classes, action, title, refresh } = this.props
+        const { classes, action, title, refresh, showRooms } = this.props
         return (
             <div className={classes.btnsContainer}>
                 <div onClick={refresh}>Refresh</div>
-                <div>Join Room</div>
+                {showRooms ? 
+                    <select onChange={showRooms} className={classes.selecet}>
+                        <option>All</option>
+                        <option>Full</option>
+                        <option>Available</option>
+                    </select> : null }
                 {title ? <div onClick={action}>{title}</div> : null}
             </div>
         );

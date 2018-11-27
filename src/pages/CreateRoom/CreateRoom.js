@@ -89,12 +89,17 @@ class CreateRoom extends React.Component {
         }
     }
 
+    number = 1;
+
     addRoom = () => {
-        this.props.onAddRoom(this.state.room)
-        this.setState({
-            ...this.state,
-            disabled: true
-        })
+        if (this.number === 1) {
+            this.props.onAddRoom(this.state.room)
+            this.setState({
+                ...this.state,
+                disabled: true
+            })
+            this.number++
+        }
     }
 
     goBack = () => {

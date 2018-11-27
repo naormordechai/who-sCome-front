@@ -10,7 +10,7 @@ const styles = {
             borderRadius: '500px',
             padding: '7px 15px',
             border: '0',
-            width: '55%',
+            width: '100%',
             outline: 'none',
             textAlign: 'center',
             fontSize: '17px',
