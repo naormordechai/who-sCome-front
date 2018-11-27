@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { IoIosLock } from "react-icons/io";
 import injectSheet from 'react-jss'
-import Test from '../Test/Test'
+import StorageService from '../../services/StorageService';
 
 const styles = {
     dialog: {
@@ -12,15 +13,15 @@ const styles = {
         width: '100%',
         backgroundColor: 'rgba(62,62,62, 0.9)',
         display: 'none',
-        fontWeight: 500,
+        fontWeight: '500',
         fontSize: '18px',
         padding: '0 7px',
     },
     containerBtns: {
         width: '250px',
-        height:'100px',
+        height: '100px',
         backgroundColor: 'rgba(100,100,100, .5)',
-        boxShadow:'1px 2px 1px #000',
+        boxShadow: '1px 2px 1px #000',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
@@ -32,70 +33,129 @@ const styles = {
     btns: {
         display: 'flex',
         justifyContent: 'space-around',
-        alignItems:'center',
-        '& div':{
-            borderRadius:'5px',
-            padding:'5px 15px'
+        alignItems: 'center',
+        '& div': {
+            borderRadius: '5px',
+            padding: '5px 15px'
         },
-        '& div:last-child':{
-            backgroundColor:'rgb(150,150,150)'
+        '& div:last-child': {
+            backgroundColor: 'rgb(150,150,150)'
         },
         '& div:first-child': {
             backgroundColor: 'rgb(36,73,103)',
         }
     },
-    active:{
-        transition:'.3s',
+    active: {
+        transition: '.3s',
         visibility: 'visible'
     }
 }
 
 
-
-
-const roomPreview = ({ room, history, classes, subHeader }) => {
-    // <Link to={`/enter password/${room._id}`} className={subHeader}>
-    //     <div className={classes.dialog}>
-    //     <div>go</div>
-    //     <div>back</div>
-    //     </div>
-    //     <div>{room.roomName}</div>
-    //     <div>{room.persons.length}/{room.maxPlayers}</div>
-    // </Link>
-
-    let dialog = React.createRef();
-
-    const openDialog = (classes) => {
-        dialog.current.style.display = 'block'
+class roomPreview extends React.Component {
+    constructor(props) {
+        super(props)
+        this.dialog = React.createRef();
     }
 
-    const goBack = (e) => {
+    openDialog = (room, classes, localStorage) => {
+        console.log(!!localStorage);
+        if (room.persons.length !== room.maxPlayers || localStorage) {
+            this.dialog.current.style.display = 'block'
+        }
+    }
+    goBack = (e) => {
         e.stopPropagation()
-        dialog.current.style.display = 'none'
+        this.dialog.current.style.display = 'none'
     }
 
-    const goForward = (e, history) => {
+    goForward = (e, history) => {
         e.stopPropagation()
-        history.push(`/enter password/${room._id}`)
+        history.push(`/enter password/${this.props.room._id}`)
     }
-    return (
 
-        <div onClick={() => openDialog(classes)} className={subHeader}>
-            <div ref={dialog} className={classes.dialog} onClick={goBack}>
-                <div className={classes.containerBtns}>
-                    <div style={{ textAlign: 'center' }}>go to <span style={{ color: '#000', 
-                    fontWeight:'700', fontSize:'19px', textDecoration:'underline' }}>{room.roomName}</span>?</div>
-                    <div className={classes.btns}>
-                        <div>Back</div>
-                        <div onClick={(e) => goForward(e, history)}>Go Forward</div>
+    renderPersons = (room, classes, subHeader, history) => {
+        if (room.persons.length === room.maxPlayers && StorageService.load(`pesronIn${room._id}`)) {
+            return (
+                <div
+                    onClick={() => this.openDialog(room, classes, localStorage.getItem(`pesronIn${room._id}`))}
+                    ref={e => this.roomPreview = e}
+                    className={subHeader}>
+                    <div ref={this.dialog} className={classes.dialog} onClick={this.goBack}>
+                        <div className={classes.containerBtns}>
+                            <div style={{ textAlign: 'center' }}>go to <span style={{
+                                color: '#000',
+                                fontWeight: '700', fontSize: '19px', textDecoration: 'underline'
+                            }}>{room.roomName}</span>?</div>
+                            <div className={classes.btns}>
+                                <div>Back</div>
+                                <div onClick={(e) => this.goForward(e, history)}>Go Forward</div>
+                            </div>
+                        </div>
                     </div>
+                    <div>{room.roomName}</div>
+                    <div>{room.persons.length}/{room.maxPlayers}</div>
                 </div>
+            )
+        } else if (room.persons.length === room.maxPlayers && !StorageService.load(`pesronIn${room._id}`)) {
+            return (
+                <div
+                    style={{ opacity: '.5' }}
+                    onClick={() => this.openDialog(room, classes, localStorage.getItem(`pesronIn${room._id}`))}
+                    ref={e => this.roomPreview = e}
+                    className={subHeader}>
+                    <div ref={this.dialog} className={classes.dialog} onClick={this.goBack}>
+                        <div className={classes.containerBtns}>
+                            <div style={{ textAlign: 'center' }}>go to <span style={{
+                                color: '#000',
+                                fontWeight: '700', fontSize: '19px', textDecoration: 'underline'
+                            }}>{room.roomName}</span>?</div>
+                            <div className={classes.btns}>
+                                <div>Back</div>
+                                <div onClick={(e) => this.goForward(e, history)}>Go Forward</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>{room.roomName}</div>
+                    <IoIosLock />
+                    <div>{room.persons.length}/{room.maxPlayers}</div>
+                </div>
+            )
+        } else {
+            return (
+                <div
+                    onClick={() => this.openDialog(room, classes, localStorage.getItem(`pesronIn${room._id}`))}
+                    ref={e => this.roomPreview = e}
+                    className={subHeader}>
+                    <div ref={this.dialog} className={classes.dialog} onClick={this.goBack}>
+                        <div className={classes.containerBtns}>
+                            <div style={{ textAlign: 'center' }}>go to <span style={{
+                                color: '#000',
+                                fontWeight: '700', fontSize: '19px', textDecoration: 'underline'
+                            }}>{room.roomName}</span>?</div>
+                            <div className={classes.btns}>
+                                <div>Back</div>
+                                <div onClick={(e) => this.goForward(e, history)}>Go Forward</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>{room.roomName}</div>
+                    <div>{room.persons.length}/{room.maxPlayers}</div>
+                </div>
+            )
+        }
+    }
+
+    render() {
+        const { room, history, classes, subHeader } = this.props
+        return (
+            <div>
+                {this.renderPersons(room, classes, subHeader,history)}
             </div>
-            <div>{room.roomName}</div>
-            <div>{room.persons.length}/{room.maxPlayers}</div>
-        </div>
-    )
+        )
+    }
 }
+
 
 
 export default injectSheet(styles)(roomPreview)

@@ -23,7 +23,10 @@ class CreateRoom extends React.Component {
     handlerText = (e, textInput) => {
         var isDisabled;
         const requestedNames = this.props.rooms.filter(room => room.roomName === e.target.value);
-        if (requestedNames.length || !e.target.value.length) {
+        if (requestedNames.length ||
+            !e.target.value.length ||
+            !this.state.room.password.length ||
+            !this.state.room.maxPlayers) {
             isDisabled = true
         } else {
             isDisabled = false
@@ -42,6 +45,10 @@ class CreateRoom extends React.Component {
     }
 
     hanlderPassword = (e) => {
+        var isDisabled;
+        if (!e.target.value.length ||
+            !this.state.room.roomName.length ||
+            !this.state.room.maxPlayers) isDisabled = true
         this.setState({
             ...this.state,
             room: {
@@ -49,11 +56,16 @@ class CreateRoom extends React.Component {
                 password: e.target.value,
                 maxPlayers: this.state.room.maxPlayers,
                 persons: this.state.room.persons
-            }
+            },
+            isDisabled
         })
     }
 
     handlerMaxPlayers = (e) => {
+        var isDisabled;
+        if (!e.target.value.length ||
+            !this.state.room.roomName.length ||
+            !this.state.room.password.length) isDisabled = true
         this.setState({
             ...this.state,
             room: {
@@ -61,7 +73,8 @@ class CreateRoom extends React.Component {
                 password: this.state.room.password,
                 maxPlayers: +e.target.value,
                 persons: this.state.room.persons
-            }
+            },
+            isDisabled
         })
     }
 
@@ -78,6 +91,10 @@ class CreateRoom extends React.Component {
 
     addRoom = () => {
         this.props.onAddRoom(this.state.room)
+        this.setState({
+            ...this.state,
+            disabled: true
+        })
     }
 
     goBack = () => {

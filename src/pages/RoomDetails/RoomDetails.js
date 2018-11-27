@@ -1,97 +1,3 @@
-// import React from 'react'
-// import injectSheet from 'react-jss'
-// import StorageService from '../../services/StorageService'
-
-// const styles = {
-//     container: {
-//         padding: '0 20px',
-//     },
-//     containerList: {
-//         maxWidth: '400px',
-//         borderRadius: '5px',
-//         margin: '0 auto',
-//         backgroundColor: 'rgb(26,33,37)',
-//         height: 'calc(100vh - 300px)',
-//         overflowY: 'scroll',
-//         padding: '0 5px',
-//         '&::-webkit-scrollbar': {
-//             width: '10px',
-//         },
-//         '&::-webkit-scrollbar-track': {
-//             borderRadius: '5px',
-//             background: '#000'
-//         },
-//         '&::-webkit-scrollbar-thumb': {
-//             borderRadius: '5px',
-//             background: '#888'
-//         },
-//         '&::-webkit-scrollbar-thumb:hover': {
-//             background: '#555'
-//         }
-//     },
-
-//     inputSearch: {
-//         borderRadius: '1000px',
-//         outline: 'none',
-//         border: 'none',
-//         padding: '4px 0px',
-//         transition: '.3s',
-//         textAlign: 'center',
-//         '&:focus': {
-//             padding: '4px 3px'
-//         }
-//     },
-//     header: {
-//         display: 'flex',
-//         justifyContent: 'space-between',
-//         borderBottom: '5px solid rgb(172,50,51)',
-//         marginBottom: '25px'
-//     },
-//     subHeader: {
-//         display: 'flex',
-//         justifyContent: 'space-between',
-//         margin: '0 8px',
-//         padding: '10px 0',
-//         color: '#fff',
-//         textDecoration: 'none',
-//         borderBottom: '2px solid #000',
-//     },
-// }
-
-
-// const roomDetails = ({ classes, match, history }) => {
-//     if (!StorageService.load(match.params.id)) {
-//         history.replace(`/enter password/${match.params.id}`)
-//     }
-
-//     return (
-//         <div className={classes.container}>
-//             <div className={classes.containerList}>
-//                 <ul>
-//                     <li>asdas</li>
-//                     <li>asdas</li>
-//                     <li>asdas</li>
-//                     <li>asdas</li>
-//                     <li>asdas</li>
-//                 </ul>
-//                 {/* {rooms.map(room => (
-//                     <RoomPreview key={room._id} room={room} subHeader={classes.subHeader} history={history} />
-//                 ))} */}
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default injectSheet(styles)(roomDetails)
-
-
-
-
-
-
-
-
-
 import React from 'react'
 import injectSheet from 'react-jss'
 import RoomService from '../../services/RoomService'
@@ -104,6 +10,8 @@ import * as actionCreators from '../../store/actions/index'
 import StorageService from '../../services/StorageService'
 import InputComponent from '../../components/InputComponent/InputComponent'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { IoIosTrash } from "react-icons/io";
+import io from 'socket.io-client'
 import 'react-notifications/lib/notifications.css';
 
 const styles = {
@@ -182,6 +90,13 @@ const styles = {
         '& div:last-child': {
             fontSize: '13px'
         }
+    },
+    person: {
+        display: 'flex',
+        alignItems: 'center',
+        '& div:first-child': {
+            marginRight: '5px'
+        }
     }
 }
 
@@ -195,7 +110,9 @@ class RoomDetails extends React.Component {
                 name: '',
                 addedAt: 0
             },
-            disabled: true
+            disabled: true,
+            personFromStorage: {},
+            socket: io.connect()
         }
     }
 
@@ -224,12 +141,12 @@ class RoomDetails extends React.Component {
         };
     }
 
-    validateRoomPassword = () => {
+    validateRoomPassword = async () => {
         if (!StorageService.load(this.props.match.params.id)) {
             this.props.history.replace(`/enter password/${this.props.match.params.id}`)
             return
         }
-        RoomService.getById(this.props.match.params.id)
+        await RoomService.getById(this.props.match.params.id)
             .then(({ data }) => {
                 this.setState({
                     ...this.state,
@@ -238,28 +155,22 @@ class RoomDetails extends React.Component {
             })
     }
 
-    componentDidMount() {
-        this.validateRoomPassword()
+    async componentDidMount() {
+        await this.validateRoomPassword()
+        if (localStorage.getItem(`pesronIn${this.props.match.params.id}`)) {
+            this.setState({
+                ...this.state,
+                personFromStorage: StorageService.load(`pesronIn${this.props.match.params.id}`)
+            })
+        }
+        if (this.state.room.persons.length >= this.state.room.maxPlayers) {
+            this.setState({
+                ...this.state,
+                disabled: true
+            })
+        }
     }
 
-    addPerson = async (ref) => {
-        ref.current.value = ''
-        const person = {
-            name: this.state.person.name,
-            addedAt: Date.now()
-        };
-        StorageService.store(`pesronIn${this.props.match.params.id}`, person)
-        await this.setState({
-            ...this.state,
-            person,
-            disabled: true,
-            room: {
-                ...this.state.room,
-                persons: this.state.room.persons.concat(StorageService.load(`pesronIn${this.props.match.params.id}`))
-            }
-        })
-        this.props.onAddPerson(this.state.room)
-    }
 
     validationDisabledBtn = () => {
         if (StorageService.load(`pesronIn${this.props.match.params.id}`)) {
@@ -268,10 +179,10 @@ class RoomDetails extends React.Component {
                 disabled: true
             })
             return
-        } else {
-
         }
-        if (this.state.person.name.length) {
+        if (this.state.person.name.length && this.state.room.persons.length !== this.state.room.maxPlayers) {
+            console.log('xxxxx');
+
             this.setState({
                 ...this.state,
                 disabled: false
@@ -285,13 +196,18 @@ class RoomDetails extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.person.name !== prevState.person.name) {
+        console.log(this.state);
+        if ((this.state.person.name !== prevState.person.name && this.state.room.persons.length < this.state.room.maxPlayers)
+            || (this.state.room.persons.length !== prevState.room.persons.length)) {
             this.validationDisabledBtn()
         }
-        console.log('currentstate', this.state)
-        console.log('prevState', prevState);
+        this.state.socket.on('updateStateRoom', (room) => {
+            this.setState({
+                ...this.state,
+                room
+            })
+        })
     }
-
 
 
     hanlderRefresh = () => {
@@ -314,8 +230,45 @@ class RoomDetails extends React.Component {
         })
     }
 
-    x = () => {
-        return this.createNotification('success')
+
+    addPerson = async (ref) => {
+        ref.current.value = ''
+        const person = {
+            name: this.state.person.name,
+            addedAt: Date.now()
+        };
+        StorageService.store(`pesronIn${this.props.match.params.id}`, person)
+        let persons = [...this.state.room.persons]
+        persons = persons.concat(StorageService.load(`pesronIn${this.props.match.params.id}`))
+        await this.setState({
+            ...this.state,
+            person,
+            disabled: true,
+            room: {
+                ...this.state.room,
+                persons
+            },
+            personFromStorage: StorageService.load(`pesronIn${this.props.match.params.id}`)
+
+        })
+        this.props.onAddPerson(this.state.room)
+        this.state.socket.emit('updatedroom', this.state.room)
+    }
+
+    handlerDeltePerson = async (person) => {
+        const updatedPersons = [...this.state.room.persons].filter(p => p.addedAt !== person.addedAt);
+        let requestedRoom = this.state.room;
+        requestedRoom.persons = updatedPersons
+        this.props.onDeletePerson(requestedRoom)
+        localStorage.removeItem(`pesronIn${this.props.match.params.id}`)
+        await this.setState({
+            ...this.state,
+            room: {
+                ...this.state.room,
+                persons: updatedPersons
+            }
+        })
+        this.state.socket.emit('updatedroom', this.state.room)
     }
 
     render() {
@@ -348,7 +301,13 @@ class RoomDetails extends React.Component {
                     <div className={classes.containerList}>
                         {room.persons.map((person, idx) => (
                             <div className={classes.containerPerson} key={uniqid()}>
-                                <div>{person.name}</div>
+                                {this.state.personFromStorage.name === person.name &&
+                                    this.state.personFromStorage.addedAt === person.addedAt ?
+                                    <div className={classes.person}>
+                                        <div><IoIosTrash onClick={() => this.handlerDeltePerson(person)} /></div>
+                                        <div>{person.name}</div>
+                                    </div>
+                                    : <div>{person.name}</div>}
                                 <div>{moment(person.addedAt).fromNow()}</div>
                             </div>
                         ))}
@@ -362,10 +321,9 @@ class RoomDetails extends React.Component {
 
 const mapStateToDispatch = dispatch => {
     return {
-        onAddPerson: (room) => dispatch(actionCreators.updateRoom(room))
+        onAddPerson: (room) => dispatch(actionCreators.updateRoom(room)),
+        onDeletePerson: (room) => dispatch(actionCreators.updateRoom(room))
     }
 }
 
 export default compose(connect(null, mapStateToDispatch), injectSheet(styles))(RoomDetails)
-
-

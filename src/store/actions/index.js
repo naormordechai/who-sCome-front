@@ -1,5 +1,5 @@
 export {
     loadRooms,
     addRoom,
-    updateRoom
+    updateRoom,
 } from './room'

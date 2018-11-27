@@ -57,15 +57,30 @@ const styles = {
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%'
+            },
+            '& button': {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                width: '100%',
+                backgroundColor: 'rgb(62,62,62)',
+                outline: 'none',
+                border: '0',
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#fff',
+                borderRadius: '5px'
             }
         },
         '& div:first-child': {
             flex: '0 0 50%',
-            backgroundColor: 'rgb(36,73,103)',
             marginRight: '5px',
+            '& button': {
+                backgroundColor: 'rgb(36,73,103)',
+            }
         },
         '& div:last-child': {
-            backgroundColor: 'rgb(62,62,62)',
             flex: '1',
         },
         '& div:first-child:hover': {
@@ -125,7 +140,7 @@ class RoomPassword extends React.Component {
                     })
                     return
                 }
-                StorageService.store(`${this.state.roomInfo._id}`,this.state.roomInfo._id )
+                StorageService.store(`${this.state.roomInfo._id}`, this.state.roomInfo._id)
                 this.props.history.push(`/room/${this.state.roomInfo._id}`)
             })
     }
@@ -161,10 +176,10 @@ class RoomPassword extends React.Component {
                     </div>
                     <div className={classes.containerBtns}>
                         <div>
-                            <span onClick={this.handlerCancel}>Cancel</span>
+                            <button onClick={this.handlerCancel}>Cancel</button>
                         </div>
                         <div>
-                            <span onClick={this.handlerPassword}>Ok</span>
+                            <button onClick={this.handlerPassword}>Ok</button>
                         </div>
                     </div>
                 </div>

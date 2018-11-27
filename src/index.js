@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import RoomReducer  from './store/reducers/room'
+import RoomReducer from './store/reducers/room'
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import io from 'socket.io-client';
+import { createClient }  from 'redux-socket.io-connect'
+
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

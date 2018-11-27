@@ -16,6 +16,7 @@ import RoomPage from './pages/RoomPage/RoomPage'
 import RoomPassword from './pages/RoomPassword/RoomPassword'
 import RoomDetails from './pages/RoomDetails/RoomDetails'
 import CreateRoom from './pages/CreateRoom/CreateRoom'
+import io from 'socket.io-client';
 import Test from './components/Test/Test'
 import './App.css';
 
@@ -50,6 +51,11 @@ const styles = {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+    }
+  }
 
   componentDidMount() {
     this.props.onLoadRooms()
@@ -58,22 +64,23 @@ class App extends Component {
   render() {
     const { classes } = this.props
     return (
-      <Router>
-        <div className={classes.app}>
-          <div className={classes.navbar}>
-            <div>
-              <span>who'sCome?</span>
+        <Router>
+          <div className={classes.app}>
+            <div className={classes.navbar}>
+              <div>
+                <span>who'sCome?</span>
+              </div>
+              <NavLink to="/" className={classes.navlink} exact activeClassName={classes.active}>Home |</NavLink>
+              <NavLink to="/last five rooms" className={classes.navlink} exact activeClassName={classes.active}>Last 5 Rooms</NavLink>
             </div>
-            <NavLink to="/" className={classes.navlink} exact activeClassName={classes.active}>Home</NavLink>
+            <div>
+              <Route path="/" exact component={RoomPage} />
+              <Route path="/create room" exact component={CreateRoom} />
+              <Route path="/enter password/:id" exact component={RoomPassword} />
+              <Route path="/room/:id" exact component={RoomDetails} />
+            </div>
           </div>
-          <div>
-            <Route path="/" exact component={RoomPage} />
-            <Route path="/create room" exact component={CreateRoom} />
-            <Route path="/enter password/:id" exact component={RoomPassword} />
-            <Route path="/room/:id" exact component={RoomDetails} />
-          </div>
-        </div>
-      </Router>
+        </Router>
     );
   }
 }

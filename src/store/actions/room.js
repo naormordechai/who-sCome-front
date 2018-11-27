@@ -41,6 +41,13 @@ const _updateIsExsistRoom = (exsist) => {
     }
 }
 
+const deletePerson = (room) => {
+    return {
+        type: actionTypes.DELETE_PERSON,
+        room
+    }
+}
+
 export const addRoom = (room) => dispatch => {
     RoomService.addRoom(room)
         .then(({ data }) => {
