@@ -175,9 +175,9 @@ class RoomDetails extends React.Component {
         this.handlerPersonFromStorage()
         // await this.validateRoomPassword()
         // this.handlerPersonFromStorage()
-        
+
     }
-    
+
     componentWillMount() {
         this.validateRoomPassword()
     }
@@ -211,19 +211,26 @@ class RoomDetails extends React.Component {
             || (this.state.room.persons.length !== prevState.room.persons.length)) {
             this.validationDisabledBtn()
         }
-        this.state.socket.on('updateStateRoom', (room) => {
-            this.setState({
+        this.state.socket.on('updateStateRoom', async (room) => {
+            await this.setState({
                 ...this.state,
                 room
             })
+            this.state.socket.close()
         })
     }
 
 
-    hanlderRefresh = () => window.location.reload()
+    hanlderRefresh = () => {
+        this.state.socket.close()
+        window.location.reload()
+    }
 
 
-    handlerBack = () =>  this.props.history.push('/')
+    handlerBack = () => {
+        this.state.socket.close()
+        this.props.history.push('/')
+    }
 
 
     updatePerson = (e) => {
@@ -268,6 +275,7 @@ class RoomDetails extends React.Component {
         })
         this.props.onAddPerson(this.state.room)
         this.state.socket.emit('updatedroom', this.state.room)
+        this.state.socket.close()
         return this.createNotification('success')()
     }
 
@@ -285,6 +293,7 @@ class RoomDetails extends React.Component {
             }
         })
         this.state.socket.emit('updatedroom', this.state.room)
+        this.state.socket.close()
     }
 
     handlerYes = (e) => {
