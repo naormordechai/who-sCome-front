@@ -113,7 +113,7 @@ class RoomDetails extends React.Component {
             },
             disabled: true,
             personFromStorage: {},
-            socket: io.connect(),
+            socket: io.connect('http://localhost:8080'),
             isDialog: false,
             requestedPerson: {}
         }
@@ -171,13 +171,11 @@ class RoomDetails extends React.Component {
         }
     }
 
+
     componentDidMount() {
         this.handlerPersonFromStorage()
-        // await this.validateRoomPassword()
-        // this.handlerPersonFromStorage()
-
     }
-
+    
     componentWillMount() {
         this.validateRoomPassword()
     }
@@ -186,6 +184,7 @@ class RoomDetails extends React.Component {
     // }
 
     validationDisabledBtn = () => {
+        // this.state.socket.emit('join', this.state.room)
         if (StorageService.load(`pesronIn${this.props.match.params.id}`)) {
             this.setState({
                 ...this.state,
@@ -206,29 +205,39 @@ class RoomDetails extends React.Component {
         }
     }
 
+
     componentDidUpdate(prevProps, prevState) {
+        console.log(prevState);
+        console.log(this.state);        
         if ((this.state.person.name !== prevState.person.name && this.state.room.persons.length < this.state.room.maxPlayers)
             || (this.state.room.persons.length !== prevState.room.persons.length)) {
             this.validationDisabledBtn()
         }
-        this.state.socket.on('updateStateRoom', async (room) => {
-            await this.setState({
-                ...this.state,
-                room
+        if (prevState.room.persons.length !== this.state.room.persons.length) {
+            console.log(prevState);
+            console.log(this.state);
+            this.state.socket.emit('join', this.state.room)
+            this.state.socket.on('updateStateRoom', async (room) => {
+                await this.setState({
+                    ...this.state,
+                    room
+                })
             })
-            this.state.socket.close()
-        })
+        }
+
+        // this.state.socket.on('test', (x) => {
+        //     console.log('xxx', x);
+
+        // })
     }
 
 
     hanlderRefresh = () => {
-        this.state.socket.close()
         window.location.reload()
     }
 
 
     handlerBack = () => {
-        this.state.socket.close()
         this.props.history.push('/')
     }
 
@@ -253,7 +262,6 @@ class RoomDetails extends React.Component {
 
 
     addPerson = async (ref) => {
-
         ref.current.value = ''
         const person = {
             name: this.state.person.name,
@@ -274,8 +282,14 @@ class RoomDetails extends React.Component {
 
         })
         this.props.onAddPerson(this.state.room)
+        this.state.socket.emit('join', this.state.room)
         this.state.socket.emit('updatedroom', this.state.room)
-        this.state.socket.close()
+        this.state.socket.on('updateStateRoom', async (room) => {
+            await this.setState({
+                ...this.state,
+                room
+            })
+        })
         return this.createNotification('success')()
     }
 
@@ -292,8 +306,14 @@ class RoomDetails extends React.Component {
                 persons: updatedPersons
             }
         })
+        this.state.socket.emit('join', this.state.room)
         this.state.socket.emit('updatedroom', this.state.room)
-        this.state.socket.close()
+        this.state.socket.on('updateStateRoom', async (room) => {
+            await this.setState({
+                ...this.state,
+                room
+            })
+        })
     }
 
     handlerYes = (e) => {

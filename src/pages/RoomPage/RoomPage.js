@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import injectSheet from 'react-jss'
 import BtnsContainer from '../../components/BtnsContainer/BtnsContainer'
 import InputComponent from '../../components/InputComponent/InputComponent'
+import io from 'socket.io-client'
+
 
 const styles = {
     dialog: {
@@ -83,7 +85,8 @@ class RoomPage extends React.Component {
             newRooms: [],
             prevRooms: [],
             sortedBy: 'All',
-            filter: ''
+            filter: '',
+            socket: io.connect('http://localhost:8080'),
         }
     }
 
@@ -194,6 +197,10 @@ class RoomPage extends React.Component {
                 sortedBy: e.target.value
             })
         }
+    }
+
+    componentDidMount() {
+        this.state.socket.disconnect()
     }
 
 

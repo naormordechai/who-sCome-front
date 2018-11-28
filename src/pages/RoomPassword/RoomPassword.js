@@ -4,6 +4,7 @@ import Dialog from '../../components/Dialog/Dialog'
 import StorageService from '../../services/StorageService'
 import injectSheet from 'react-jss'
 
+
 const styles = {
     container: {
         maxWidth: '300px',
@@ -105,7 +106,8 @@ class RoomPassword extends React.Component {
                 password: '',
                 _id: ''
             },
-            isWrong: false
+            isWrong: false,
+
         }
     }
 
@@ -163,11 +165,11 @@ class RoomPassword extends React.Component {
             <div>
                 <div className={classes.wrongPassword}>
                     <Dialog
-                     wrong={isWrong} 
-                     closeDialog={this.closeDialog} 
-                     title="WRONG PASSWORD"
-                     onCancel="TRY AGAIN"
-                     />
+                        wrong={isWrong}
+                        closeDialog={this.closeDialog}
+                        title="WRONG PASSWORD"
+                        onCancel="TRY AGAIN"
+                    />
                 </div>
                 <div className={classes.container}>
                     <div className={classes.title}>Password required</div>
