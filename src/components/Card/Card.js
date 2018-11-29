@@ -1,5 +1,7 @@
 import React from 'react'
 import injectSheet from 'react-jss'
+import Dialog from '../Dialog/Dialog'
+import Calendar from 'react-calendar';
 
 const styles = {
     container: {
@@ -9,6 +11,11 @@ const styles = {
         padding: '7px',
         borderRadius: '5px',
         transform: 'translate(0,50px)',
+    },
+
+    calender: {
+        width: '100%',
+        color: '#000'
     },
 
     title: {
@@ -103,11 +110,9 @@ const onSubmit = (e, callBack) => {
     callBack()
 }
 
-
-
 const card = ({ classes, data, handlerText, hanlderPassword,
     handlerMaxPlayers, handlerPositiveRequest, handlerNegativeRequest,
-    validateText, validateLengthText, isDisabled, marginTop }) => {
+    validateText, validateLengthText, isDisabled, marginTop, openDialogDate, timeValue, handlerTime }) => {
     let textInput = React.createRef();
     const validateRoomName = (isExsistRoomName, lengthTextRoomName, textInput) => {
         if (lengthTextRoomName) {
@@ -122,44 +127,68 @@ const card = ({ classes, data, handlerText, hanlderPassword,
     }
 
     return (
-        <form onSubmit={(e) => onSubmit(e, handlerPositiveRequest)}>
-            <div className={classes.container}>
-                <div className={classes.title}>{data.header}</div>
-                <div>{validateRoomName(validateText, validateLengthText, textInput)}</div>
-                <div className={classes.boxPassword} style={marginTop ? { marginTop: '25px' } : { marginTop: '0' }}>
-                    <div>
-                        <label>{data.title1}</label>
+        <div>
+            <form onSubmit={(e) => onSubmit(e, handlerPositiveRequest)}>
+                <div className={classes.container}>
+                    <div className={classes.title}>{data.header}</div>
+                    <div>{validateRoomName(validateText, validateLengthText, textInput)}</div>
+                    <div className={classes.boxPassword} style={marginTop ? { marginTop: '25px' } : { marginTop: '0' }}>
+                        <div>
+                            <label>{data.title1}</label>
+                        </div>
+                        <div>
+                            <input required type="text" onChange={(e) => handlerText(e, textInput)} />
+                        </div>
                     </div>
-                    <div>
-                        <input required type="text" onChange={(e) => handlerText(e, textInput)} />
+                    <div className={classes.boxPassword}>
+                        <div>
+                            <label>{data.title2}</label>
+                        </div>
+                        <div>
+                            <input required type="password" onChange={hanlderPassword} />
+                        </div>
+                    </div>
+                    <div className={classes.boxPassword}>
+                        <div>
+                            <label>{data.title3}</label>
+                        </div>
+                        <div>
+                            <input required type="number" min={2} onChange={handlerMaxPlayers} />
+                        </div>
+                    </div>
+                    <div className={classes.boxPassword}>
+                        <div style={{flex:' 0 0 15%'}}>
+                            <label>{data.title4}</label>
+                        </div>
+                        <div style={{border:'1px solid #000',
+                         flex:'1', 
+                         textAlign:'center', 
+                         padding:'3px', borderRadius:'5px', fontWeight:'700'}} onClick={openDialogDate}>
+                            choose date
+                        </div>
+                    </div>
+                    <div className={classes.boxPassword}>
+                        <div style={{flex:' 0 0 15%'}}>
+                            <label>Time</label>
+                        </div>
+                        <div style={{
+                         flex:'1', 
+                         textAlign:'center', 
+                         borderRadius:'5px', fontWeight:'700'}}>
+                            <input type="time" required onChange={handlerTime}/>
+                        </div>
+                    </div>
+                    <div className={classes.containerBtns}>
+                        <div onClick={handlerNegativeRequest}>
+                            <span>Cancel</span>
+                        </div>
+                        {isDisabled ?
+                            <input type="submit" value="Create" className={classes.submit} ref={textInput} disabled={isDisabled} /> :
+                            <input type="submit" value="Create" className={classes.submit} ref={textInput} disabled={isDisabled} />}
                     </div>
                 </div>
-                <div className={classes.boxPassword}>
-                    <div>
-                        <label>{data.title2}</label>
-                    </div>
-                    <div>
-                        <input required type="password" onChange={hanlderPassword} />
-                    </div>
-                </div>
-                <div className={classes.boxPassword}>
-                    <div>
-                        <label>{data.title3}</label>
-                    </div>
-                    <div>
-                        <input required type="number" onChange={handlerMaxPlayers} />
-                    </div>
-                </div>
-                <div className={classes.containerBtns}>
-                    <div onClick={handlerNegativeRequest}>
-                        <span>Cancel</span>
-                    </div>
-                    {isDisabled ?
-                        <input type="submit" value="Create" className={classes.submit} ref={textInput} disabled={isDisabled} /> :
-                        <input type="submit" value="Create" className={classes.submit} ref={textInput} disabled={isDisabled} />}
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     )
 }
 

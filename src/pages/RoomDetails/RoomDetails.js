@@ -113,7 +113,7 @@ class RoomDetails extends React.Component {
             },
             disabled: true,
             personFromStorage: {},
-            socket: io.connect(),
+            socket: io.connect('http://localhost:8080'),
             isDialog: false,
             requestedPerson: {}
         }
@@ -172,13 +172,9 @@ class RoomDetails extends React.Component {
     }
 
 
-    componentDidMount() {
-        this.handlerPersonFromStorage()
-
-    }
-
-    async componentWillMount() {
+    async componentDidMount() {
         await this.validateRoomPassword()
+        this.handlerPersonFromStorage()
         this.state.socket.emit('join', this.state.room)
         this.state.socket.on('updateStateRoom', async (room) => {
             await this.setState({
@@ -186,30 +182,13 @@ class RoomDetails extends React.Component {
                 room
             })
         })
-        // if (!this.state.room.persons.length) {
-        //     this.state.socket.emit('join', this.state.room)
-        //     this.state.socket.on('updateStateRoom', async (room) => {
-        //         await this.setState({
-        //             ...this.state,
-        //             room
-        //         })
-        //     })
-        // } else {
-        //     this.state.socket.emit('join', this.state.room)
-        //     this.state.socket.on('updateStateRoom', async (room) => {
-        //         await this.setState({
-        //             ...this.state,
-        //             room
-        //         })
-        //     })
-        // }
     }
+
     // if (this.roomNameRef.innerText.length >= 32) {
     //     this.roomNameRef.style.overflowX = 'scroll'
     // }
 
     validationDisabledBtn = () => {
-        // this.state.socket.emit('join', this.state.room)
         if (StorageService.load(`pesronIn${this.props.match.params.id}`)) {
             this.setState({
                 ...this.state,
@@ -348,6 +327,7 @@ class RoomDetails extends React.Component {
                     title="Are You Sure?"
                     onCancel="No, Back To List."
                     onAccept="Yes"
+                    topStyle="30%"
                 />
                 <InputComponent
                     width="100%"
@@ -362,6 +342,10 @@ class RoomDetails extends React.Component {
                     title="Back To Home"
                     action={this.handlerBack} />
                 <div className={classes.containerDetails}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px', borderBottom: '3px solid #000' }}>
+                        <div>{moment(room.date).format("MMM Do YY")}</div>
+                        <div>{room.time}</div>
+                    </div>
                     <div ref={e => this.roomNameRef = e} className={classes.title}>{room.roomName}</div>
                     <div className={classes.header}>
                         <div>Person List</div>

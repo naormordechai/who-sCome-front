@@ -2,6 +2,7 @@ import React from 'react'
 import Card from '../../components/Card/Card'
 import StorageService from '../../services/StorageService'
 import * as actionCreators from '../../store/actions/index'
+import Dialog from '../../components/Dialog/Dialog'
 import { connect } from 'react-redux'
 
 class CreateRoom extends React.Component {
@@ -12,11 +13,16 @@ class CreateRoom extends React.Component {
                 roomName: '',
                 password: '',
                 maxPlayers: 0,
-                persons: []
+                persons: [],
+                date: 0,
+                time: '00:00'
             },
             requestedNames: [],
             isDisabled: true,
-            requestedRoom: {}
+            requestedRoom: {},
+            dialogData: {
+                isWrong: false
+            }
         }
     }
 
@@ -34,10 +40,8 @@ class CreateRoom extends React.Component {
         this.setState({
             ...this.state,
             room: {
-                roomName: e.target.value,
-                password: this.state.room.password,
-                maxPlayers: this.state.room.maxPlayers,
-                persons: this.state.room.persons
+                ...this.state.room,
+                roomName: e.target.value
             },
             requestedNames,
             isDisabled
@@ -52,10 +56,8 @@ class CreateRoom extends React.Component {
         this.setState({
             ...this.state,
             room: {
-                roomName: this.state.room.roomName,
-                password: e.target.value,
-                maxPlayers: this.state.room.maxPlayers,
-                persons: this.state.room.persons
+                ...this.state.room,
+                password: e.target.value
             },
             isDisabled
         })
@@ -69,10 +71,8 @@ class CreateRoom extends React.Component {
         this.setState({
             ...this.state,
             room: {
-                roomName: this.state.room.roomName,
-                password: this.state.room.password,
-                maxPlayers: +e.target.value,
-                persons: this.state.room.persons
+                ...this.state.room,
+                maxPlayers: +e.target.value
             },
             isDisabled
         })
@@ -89,8 +89,8 @@ class CreateRoom extends React.Component {
         }
     }
 
-    number = 1;
 
+    number = 1;
     addRoom = () => {
         if (this.number === 1) {
             this.props.onAddRoom(this.state.room)
@@ -102,27 +102,82 @@ class CreateRoom extends React.Component {
         }
     }
 
-    goBack = () => {
-        this.props.history.push('/')
+    goBack = () => this.props.history.push('/')
+
+
+    handleDate = (e) => {
+        console.log(e);
+        const date = e.getTime()
+        this.setState({
+            ...this.state,
+            room: {
+                ...this.state.room,
+                date
+            }
+        })
+    }
+
+    closeDialog = () => {
+        this.setState({
+            ...this.state,
+            dialogData: {
+                ...this.state.dialogData,
+                isWrong: false
+            }
+        })
+    }
+
+    openDialogDate = () => {
+        this.setState({
+            ...this.state,
+            dialogData: {
+                ...this.state.dialogData,
+                isWrong: true
+            }
+        })
+    }
+
+    handlerTime = (e) => {
+        this.setState({
+            ...this.state,
+            room: {
+                ...this.state.room,
+                time: e.target.value
+            }
+        })
     }
 
     render() {
+        console.log(this.state);
+
         return (
             <div>
+                <Dialog
+                    wrong={this.state.dialogData.isWrong}
+                    closeDialog={this.closeDialog}
+                    isCalender={true}
+                    topStyle="30px"
+                    handlerCalenderDate={this.handleDate}
+                />
                 <Card data={{
                     header: 'Create room:',
                     title1: 'Room name',
                     title2: 'password:',
-                    title3: 'Max players:'
+                    title3: 'Max players:',
+                    title4: 'Date'
                 }} handlerText={this.handlerText}
                     hanlderPassword={this.hanlderPassword}
                     handlerMaxPlayers={this.handlerMaxPlayers}
                     handlerPositiveRequest={this.addRoom}
                     handlerNegativeRequest={this.goBack}
+                    openDialogDate={this.openDialogDate}
+                    handlerTime={this.handlerTime}
                     validateText={this.state.requestedNames}
                     validateLengthText={this.state.room.roomName}
                     isDisabled={this.state.isDisabled}
                     marginTop={25}
+                    timeValue={this.state.room.time}
+
                 >
                 </Card>
             </div>

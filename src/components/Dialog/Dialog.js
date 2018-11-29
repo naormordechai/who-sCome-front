@@ -1,4 +1,5 @@
 import React from 'react'
+import Calendar from 'react-calendar';
 import injectSheet from 'react-jss'
 
 const styles = {
@@ -45,6 +46,8 @@ const styles = {
 }
 
 
+
+
 class Dialog extends React.Component {
 
     openRef = () => {
@@ -59,13 +62,19 @@ class Dialog extends React.Component {
     }
 
     render() {
-        const { classes, yes, title, onCancel, onAccept } = this.props
+        const { classes, yes, title, onCancel, onAccept, isCalender, topStyle, handlerCalenderDate, closeDialog } = this.props
         return (
             <div onClick={this.openRef} ref={e => this.containerRef = e} className={classes.container}>
-                <div className={classes.boxErrorPassword}>
-                    <div>{title}</div>
+                <div className={classes.boxErrorPassword} style={{ top: topStyle }}>
+                    {isCalender ? <div onClick={e => e.stopPropagation()}>
+                        <Calendar style={{ position: 'relative', top: '0' }} className={classes.calender}
+                            minDate={new Date()}
+                            onChange={e => handlerCalenderDate(e)}
+                            maxDetail="month"
+                            maxDate={new Date(2019, 0)}
+                        /></div> : <div>{title}</div>}
                     <div className={classes.tryAgain}>{onCancel}</div>
-                    {onAccept ? <div style={{marginTop:'20px', background:'red'}} className={classes.tryAgain} onClick={yes}>{onAccept}</div> : null }
+                    {onAccept ? <div style={{ marginTop: '20px', background: 'red' }} className={classes.tryAgain} onClick={yes}>{onAccept}</div> : null}
                 </div>
             </div>
         )

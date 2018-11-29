@@ -169,6 +169,7 @@ class RoomPassword extends React.Component {
                         closeDialog={this.closeDialog}
                         title="WRONG PASSWORD"
                         onCancel="TRY AGAIN"
+                        topStyle="30%"
                     />
                 </div>
                 <div className={classes.container}>
