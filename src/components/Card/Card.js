@@ -1,5 +1,6 @@
 import React from 'react'
 import injectSheet from 'react-jss'
+import moment from 'moment'
 import Dialog from '../Dialog/Dialog'
 import Calendar from 'react-calendar';
 
@@ -32,14 +33,17 @@ const styles = {
         alignItems: 'center',
         marginBottom: '5px',
         justifyContent: 'space-between',
-        '& label:first-child': {
-            marginLeft: '5px',
+        '& div:first-child': {
+            flex:'0 0 30%'
+        },
+        '& div:last-child':{
+            flex:'1'
         },
         '& input': {
             backgroundColor: 'rgb(17,22,25)',
             border: '0',
+            height:'22px',
             borderRadius: '5px',
-            padding: '3px',
             outline: 'none',
             textAlign: 'center',
             color: '#fff',
@@ -112,7 +116,8 @@ const onSubmit = (e, callBack) => {
 
 const card = ({ classes, data, handlerText, hanlderPassword,
     handlerMaxPlayers, handlerPositiveRequest, handlerNegativeRequest,
-    validateText, validateLengthText, isDisabled, marginTop, openDialogDate, timeValue, handlerTime }) => {
+    validateText, validateLengthText, isDisabled, marginTop, openDialogDate, 
+    handlerTime, date }) => {
     let textInput = React.createRef();
     const validateRoomName = (isExsistRoomName, lengthTextRoomName, textInput) => {
         if (lengthTextRoomName) {
@@ -157,24 +162,21 @@ const card = ({ classes, data, handlerText, hanlderPassword,
                         </div>
                     </div>
                     <div className={classes.boxPassword}>
-                        <div style={{flex:' 0 0 15%'}}>
+                        <div>
                             <label>{data.title4}</label>
                         </div>
                         <div style={{border:'1px solid #000',
-                         flex:'1', 
                          textAlign:'center', 
-                         padding:'3px', borderRadius:'5px', fontWeight:'700'}} onClick={openDialogDate}>
-                            choose date
+                         background:'rgb(17,22,25)',
+                         borderRadius:'5px', fontWeight:'700', height:'22px'}} onClick={openDialogDate}>
+                            {date === 0 ? "choose date" : moment(date).format("MMM Do YY")}
                         </div>
                     </div>
                     <div className={classes.boxPassword}>
-                        <div style={{flex:' 0 0 15%'}}>
+                        <div>
                             <label>Time</label>
                         </div>
-                        <div style={{
-                         flex:'1', 
-                         textAlign:'center', 
-                         borderRadius:'5px', fontWeight:'700'}}>
+                        <div>
                             <input type="time" required onChange={handlerTime}/>
                         </div>
                     </div>

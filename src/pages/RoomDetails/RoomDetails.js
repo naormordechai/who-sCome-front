@@ -172,6 +172,7 @@ class RoomDetails extends React.Component {
     }
 
 
+
     async componentDidMount() {
         await this.validateRoomPassword()
         this.handlerPersonFromStorage()
@@ -182,6 +183,8 @@ class RoomDetails extends React.Component {
                 room
             })
         })
+        // if (this.roomNameRef.innerText.length >= 32) this.roomNameRef.style.overflowX = 'scroll'
+
     }
 
     // if (this.roomNameRef.innerText.length >= 32) {
@@ -208,7 +211,6 @@ class RoomDetails extends React.Component {
             })
         }
     }
-
 
     componentDidUpdate(prevProps, prevState) {
         if ((this.state.person.name !== prevState.person.name && this.state.room.persons.length < this.state.room.maxPlayers)
@@ -332,7 +334,6 @@ class RoomDetails extends React.Component {
                 <InputComponent
                     width="100%"
                     placeholder="add you to the list..."
-                    okBtn={true}
                     onClickProps={this.addPerson}
                     onChangeProps={this.updatePerson}
                     disabled={this.state.disabled}

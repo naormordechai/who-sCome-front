@@ -15,14 +15,16 @@ class CreateRoom extends React.Component {
                 maxPlayers: 0,
                 persons: [],
                 date: 0,
-                time: '00:00'
+                time: '',
             },
+            requestedId: '',
             requestedNames: [],
             isDisabled: true,
             requestedRoom: {},
             dialogData: {
                 isWrong: false
-            }
+            },
+            isCreated: false
         }
     }
 
@@ -32,7 +34,9 @@ class CreateRoom extends React.Component {
         if (requestedNames.length ||
             !e.target.value.length ||
             !this.state.room.password.length ||
-            !this.state.room.maxPlayers) {
+            !this.state.room.maxPlayers ||
+            !this.state.room.date ||
+            !this.state.room.time) {
             isDisabled = true
         } else {
             isDisabled = false
@@ -52,7 +56,9 @@ class CreateRoom extends React.Component {
         var isDisabled;
         if (!e.target.value.length ||
             !this.state.room.roomName.length ||
-            !this.state.room.maxPlayers) isDisabled = true
+            !this.state.room.maxPlayers ||
+            !this.state.room.date ||
+            !this.state.room.time) isDisabled = true
         this.setState({
             ...this.state,
             room: {
@@ -67,7 +73,9 @@ class CreateRoom extends React.Component {
         var isDisabled;
         if (!e.target.value.length ||
             !this.state.room.roomName.length ||
-            !this.state.room.password.length) isDisabled = true
+            !this.state.room.password.length ||
+            !this.state.room.date ||
+            !this.state.room.time) isDisabled = true
         this.setState({
             ...this.state,
             room: {
@@ -79,14 +87,23 @@ class CreateRoom extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const requestedRoom = this.props.rooms.find(room => room.roomName === this.state.room.roomName)
-        if (prevProps.rooms.length !== this.props.rooms.length && this.props.history.action !== 'POP') {
-            StorageService.store(requestedRoom._id, requestedRoom._id)
-            this.props.history.push(`/room/${requestedRoom._id}`)
-        } else if (this.props.history.action === 'POP' && this.props.rooms.length === prevProps.rooms.length + 1) {
-            StorageService.store(requestedRoom._id, requestedRoom._id)
-            this.props.history.push(`/room/${requestedRoom._id}`)
+        if (this.state.isCreated && prevProps.rooms.length !== this.props.rooms.length) {
+            const requestedRoom = this.props.rooms[this.props.rooms.length - 1];
+                StorageService.store(requestedRoom._id, requestedRoom._id)
+                this.props.history.push(`/room/${requestedRoom._id}`)
         }
+        // const requestedRoom = this.props.rooms.find(room => room.roomName === this.state.room.roomName)
+        // if (requestedRoom) {
+        //     StorageService.store(requestedRoom._id, requestedRoom._id)
+        //     this.props.history.push(`/room/${requestedRoom._id}`)
+        // }
+        // if (prevProps.rooms.length !== this.props.rooms.length && this.props.history.action !== 'POP') {
+        //     StorageService.store(requestedRoom._id, requestedRoom._id)
+        //     this.props.history.push(`/room/${requestedRoom._id}`)
+        // } else if (this.props.history.action === 'POP' && this.props.rooms.length === prevProps.rooms.length + 1) {
+        //     StorageService.store(requestedRoom._id, requestedRoom._id)
+        //     this.props.history.push(`/room/${requestedRoom._id}`)
+        // }
     }
 
 
@@ -96,28 +113,36 @@ class CreateRoom extends React.Component {
             this.props.onAddRoom(this.state.room)
             this.setState({
                 ...this.state,
-                disabled: true
+                disabled: true,
+                isCreated: true
             })
             this.number++
         }
+
     }
 
     goBack = () => this.props.history.push('/')
 
 
     handleDate = (e) => {
-        console.log(e);
+        var isDisabled;
+        if (!this.state.room.roomName.length ||
+            !this.state.room.password.length ||
+            !this.state.room.maxPlayers ||
+            !this.state.room.time) isDisabled = true
         const date = e.getTime()
         this.setState({
             ...this.state,
             room: {
                 ...this.state.room,
                 date
-            }
+            },
+            isDisabled
         })
     }
 
     closeDialog = () => {
+
         this.setState({
             ...this.state,
             dialogData: {
@@ -138,18 +163,23 @@ class CreateRoom extends React.Component {
     }
 
     handlerTime = (e) => {
+        var isDisabled;
+        if (!e.target.value.length ||
+            !this.state.room.roomName.length ||
+            !this.state.room.password.length ||
+            !this.state.room.maxPlayers ||
+            !this.state.room.date) isDisabled = true
         this.setState({
             ...this.state,
             room: {
                 ...this.state.room,
                 time: e.target.value
-            }
+            },
+            isDisabled
         })
     }
 
     render() {
-        console.log(this.state);
-
         return (
             <div>
                 <Dialog
@@ -176,8 +206,7 @@ class CreateRoom extends React.Component {
                     validateLengthText={this.state.room.roomName}
                     isDisabled={this.state.isDisabled}
                     marginTop={25}
-                    timeValue={this.state.room.time}
-
+                    date={this.state.room.date}
                 >
                 </Card>
             </div>

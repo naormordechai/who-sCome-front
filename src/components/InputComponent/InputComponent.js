@@ -57,11 +57,11 @@ const inputComponent = ({ classes, onChangeProps, placeholder, width, okBtn, onC
                 type="text"
                 placeholder={placeholder}
                 onChange={onChangeProps} />
-            {okBtn ? <button
+            <button
                 style={textValidation ? null : { backgroundColor: 'rgb(47,94,133)' }}
                 disabled={disabled}
                 onClick={() => onClickProps(refInput)}
-                className={classes.okBtn}>Ok</button> : null}
+                className={classes.okBtn}>Ok</button>
         </div >
     )
 }
