@@ -7,6 +7,8 @@ const styles = {
         textAlign: 'center',
         position: 'relative',
         '& > input': {
+            color: '#000',
+            fontWeight: '700',
             borderRadius: '500px',
             padding: '7px 15px',
             border: '0',
@@ -15,10 +17,11 @@ const styles = {
             textAlign: 'center',
             fontSize: '17px',
             backgroundColor: 'rgb(26,33,37, .7)',
-            color: '#fff',
             '&::placeholder': {
                 color: '#fff',
-                opacity: '.6'
+                opacity: '.4',
+                fontWeight: '200',
+
             }
         }
     },
