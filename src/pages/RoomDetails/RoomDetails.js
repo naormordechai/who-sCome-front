@@ -98,6 +98,11 @@ const styles = {
         '& div:first-child': {
             marginRight: '5px'
         }
+    },
+    '@media(max-width:400px)': {
+        containerList: {
+            height: 'calc(100vh - 360px)',
+        }
     }
 }
 

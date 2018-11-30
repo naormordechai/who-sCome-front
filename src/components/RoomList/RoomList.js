@@ -10,19 +10,19 @@ const styles = {
     containerList: {
         height: 'calc(100vh - 300px)',
         overflowY: 'scroll',
-        padding:'0 5px',
+        padding: '0 5px',
         '&::-webkit-scrollbar': {
             width: '10px',
         },
-        '&::-webkit-scrollbar-track' : {
-            borderRadius:'5px',
+        '&::-webkit-scrollbar-track': {
+            borderRadius: '5px',
             background: '#000'
         },
-        '&::-webkit-scrollbar-thumb':{
-            borderRadius:'5px',
+        '&::-webkit-scrollbar-thumb': {
+            borderRadius: '5px',
             background: '#888'
         },
-        '&::-webkit-scrollbar-thumb:hover':{
+        '&::-webkit-scrollbar-thumb:hover': {
             background: '#555'
         }
     },
@@ -82,7 +82,7 @@ const RoomList = ({ rooms, classes, history }) => (
         </div>
         <div className={classes.containerList}>
             {rooms.map(room => (
-                <RoomPreview key={room._id} room={room} subHeader={classes.subHeader} history={history}/>
+                <RoomPreview key={room._id} room={room} subHeader={classes.subHeader} history={history} />
             ))}
         </div>
     </div>
