@@ -61,6 +61,27 @@ class Dialog extends React.Component {
         }
     }
 
+    getMinMxaMonth = () => {
+        const fullYear = new Date().getFullYear()
+        if (new Date().getMonth() === 10) {
+            return {
+                startMonth: new Date(),
+                endMonth: new Date(fullYear + 1, 0)
+            }
+        } else if (new Date().getMonth() === 11) {
+            return {
+                startMonth: new Date(),
+                endMonth: new Date(fullYear + 1, 1)
+            }
+        } else {
+            let currentMonth = new Date().getMonth()
+            return {
+                startMonth: new Date(),
+                endMonth: new Date(fullYear, currentMonth + 2)
+            }
+        }
+    }
+
     render() {
         const { classes, yes, title, onCancel, onAccept, isCalender, topStyle, handlerCalenderDate, closeDialog } = this.props
         return (
@@ -68,10 +89,10 @@ class Dialog extends React.Component {
                 <div className={classes.boxErrorPassword} style={{ top: topStyle }}>
                     {isCalender ? <div onClick={e => e.stopPropagation()}>
                         <Calendar style={{ position: 'relative', top: '0' }} className={classes.calender}
-                            minDate={new Date()}
+                            minDate={this.getMinMxaMonth().startMonth}
                             onChange={e => handlerCalenderDate(e)}
                             maxDetail="month"
-                            maxDate={new Date(2019, 0)}
+                            maxDate={this.getMinMxaMonth().endMonth}
                         /></div> : <div>{title}</div>}
                     <div className={classes.tryAgain}>{onCancel}</div>
                     {onAccept ? <div style={{ marginTop: '20px', background: 'red' }} className={classes.tryAgain} onClick={yes}>{onAccept}</div> : null}
