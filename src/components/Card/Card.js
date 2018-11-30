@@ -169,7 +169,7 @@ const card = ({ classes, data, handlerText, hanlderPassword,
                          textAlign:'center', 
                          background:'rgb(17,22,25)',
                          borderRadius:'5px', fontWeight:'700', height:'22px'}} onClick={openDialogDate}>
-                            {date === 0 ? "choose date" : moment(date).format("MMM Do YY")}
+                            {date === 0 ? null : moment(date).format("MMM Do YY")}
                         </div>
                     </div>
                     <div className={classes.boxPassword}>
