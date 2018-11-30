@@ -16,6 +16,7 @@ const styles = {
         fontWeight: '500',
         fontSize: '18px',
         padding: '0 7px',
+        zIndex:'1'
     },
     containerBtns: {
         width: '350px',
