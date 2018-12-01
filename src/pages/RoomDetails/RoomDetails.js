@@ -368,6 +368,7 @@ class RoomDetails extends React.Component {
                                     this.state.personFromStorage.addedAt === person.addedAt ?
                                     <div className={classes.person}>
                                         <div><IoIosTrash onClick={() => this.handlerOpenDialog(person)} /></div>
+                                        {/* <div><IoIosTrash onClick={() => this.handlerDeltePerson(person)} /></div> */}
                                         <div style={{wordBreak:'break-all', width:'75%'}}>{person.name}</div>
                                     </div>
                                     : <div style={{wordBreak:'break-all', width:'65%'}}>{person.name}</div>}
