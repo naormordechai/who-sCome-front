@@ -182,8 +182,8 @@ class RoomDetails extends React.Component {
         await this.validateRoomPassword()
         this.handlerPersonFromStorage()
         this.state.socket.emit('join', this.state.room)
-        this.state.socket.on('updateStateRoom', async (room) => {
-            await this.setState({
+        this.state.socket.on('updateStateRoom', (room) => {
+             this.setState({
                 ...this.state,
                 room
             })
