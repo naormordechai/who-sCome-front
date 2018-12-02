@@ -277,8 +277,8 @@ class RoomDetails extends React.Component {
         this.props.onAddPerson(this.state.room)
         this.state.socket.emit('join', this.state.room)
         this.state.socket.emit('updatedroom', this.state.room)
-        this.state.socket.on('updateStateRoom', async (room) => {
-            await this.setState({
+        this.state.socket.on('updateStateRoom', (room) => {
+            this.setState({
                 ...this.state,
                 room
             })
@@ -301,8 +301,8 @@ class RoomDetails extends React.Component {
         })
         this.state.socket.emit('join', this.state.room)
         this.state.socket.emit('updatedroom', this.state.room)
-        this.state.socket.on('updateStateRoom', async (room) => {
-            await this.setState({
+        this.state.socket.on('updateStateRoom', (room) => {
+            this.setState({
                 ...this.state,
                 room
             })
