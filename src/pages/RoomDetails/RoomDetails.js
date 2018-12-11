@@ -118,7 +118,7 @@ class RoomDetails extends React.Component {
             },
             disabled: true,
             personFromStorage: {},
-            socket: io.connect(),
+            socket: io.connect('http://localhost:8080/'),
             isDialog: false,
             requestedPerson: {}
         }
@@ -133,7 +133,7 @@ class RoomDetails extends React.Component {
                     }, 1000);
                     break;
                 case 'success':
-                    NotificationManager.success('Success message', 'Title here');
+                    NotificationManager.success('Send the link to your friends in order for them to register', 'Great!');
                     break;
                 case 'warning':
                     NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
@@ -183,7 +183,7 @@ class RoomDetails extends React.Component {
         this.handlerPersonFromStorage()
         this.state.socket.emit('join', this.state.room)
         this.state.socket.on('updateStateRoom', (room) => {
-             this.setState({
+            this.setState({
                 ...this.state,
                 room
             })
@@ -222,6 +222,7 @@ class RoomDetails extends React.Component {
             || (this.state.room.persons.length !== prevState.room.persons.length)) {
             this.validationDisabledBtn()
         }
+
     }
 
 
@@ -275,14 +276,14 @@ class RoomDetails extends React.Component {
 
         })
         this.props.onAddPerson(this.state.room)
-        this.state.socket.emit('join', this.state.room)
-        this.state.socket.emit('updatedroom', this.state.room)
-        this.state.socket.on('updateStateRoom', (room) => {
-            this.setState({
-                ...this.state,
-                room
-            })
-        })
+        // this.state.socket.emit('join', this.state.room)
+        // this.state.socket.emit('updatedroom', this.state.room)
+        // this.state.socket.on('updateStateRoom', (room) => {
+        //     this.setState({
+        //         ...this.state,
+        //         room
+        //     })
+        // })
         return this.createNotification('success')()
     }
 
@@ -299,14 +300,14 @@ class RoomDetails extends React.Component {
                 persons: updatedPersons
             }
         })
-        this.state.socket.emit('join', this.state.room)
-        this.state.socket.emit('updatedroom', this.state.room)
-        this.state.socket.on('updateStateRoom', (room) => {
-            this.setState({
-                ...this.state,
-                room
-            })
-        })
+        // this.state.socket.emit('join', this.state.room)
+        // this.state.socket.emit('updatedroom', this.state.room)
+        // this.state.socket.on('updateStateRoom', (room) => {
+        //     this.setState({
+        //         ...this.state,
+        //         room
+        //     })
+        // })
     }
 
     handlerYes = (e) => {
@@ -342,6 +343,7 @@ class RoomDetails extends React.Component {
                     onClickProps={this.addPerson}
                     onChangeProps={this.updatePerson}
                     disabled={this.state.disabled}
+                    isBtn={true}
                 />
                 <BtnsContainer
                     refresh={this.hanlderRefresh}
@@ -369,9 +371,9 @@ class RoomDetails extends React.Component {
                                     <div className={classes.person}>
                                         <div><IoIosTrash onClick={() => this.handlerOpenDialog(person)} /></div>
                                         {/* <div><IoIosTrash onClick={() => this.handlerDeltePerson(person)} /></div> */}
-                                        <div style={{wordBreak:'break-all', width:'75%'}}>{person.name}</div>
+                                        <div style={{ wordBreak: 'break-all', width: '75%' }}>{person.name}</div>
                                     </div>
-                                    : <div style={{wordBreak:'break-all', width:'65%'}}>{person.name}</div>}
+                                    : <div style={{ wordBreak: 'break-all', width: '65%' }}>{person.name}</div>}
                                 <div>{moment(person.addedAt).fromNow()}</div>
                             </div>
                         ))}

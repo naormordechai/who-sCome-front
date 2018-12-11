@@ -50,7 +50,7 @@ const styles = {
     }
 }
 
-const inputComponent = ({ classes, onChangeProps, placeholder, width, okBtn, onClickProps, textValidation, disabled }) => {
+const inputComponent = ({ classes, onChangeProps, placeholder, width, okBtn, onClickProps, textValidation, disabled, isBtn }) => {
     let refInput = React.createRef()
     return (
         <div className={classes.searchInput}>
@@ -60,11 +60,12 @@ const inputComponent = ({ classes, onChangeProps, placeholder, width, okBtn, onC
                 type="text"
                 placeholder={placeholder}
                 onChange={onChangeProps} />
+                {isBtn ?
             <button
                 style={textValidation ? null : { backgroundColor: 'rgb(47,94,133)' }}
                 disabled={disabled}
                 onClick={() => onClickProps(refInput)}
-                className={classes.okBtn}>Ok</button>
+                className={classes.okBtn}>Ok</button> : null }
         </div >
     )
 }

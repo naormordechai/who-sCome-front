@@ -157,6 +157,8 @@ class RoomPassword extends React.Component {
 
     handlerCancel = () => this.props.history.push('/')
 
+    goToCreateRoom = () => this.props.history.push('/create room')
+
     render() {
         const { classes } = this.props
         const { isWrong } = this.state
@@ -167,7 +169,9 @@ class RoomPassword extends React.Component {
                     <Dialog
                         wrong={isWrong}
                         closeDialog={this.closeDialog}
-                        title="WRONG PASSWORD"
+                        title="Only people with permission can enter this room"
+                        title1="you can create a room in yourself"
+                        action={this.goToCreateRoom}
                         onCancel="TRY AGAIN"
                         topStyle="30%"
                     />

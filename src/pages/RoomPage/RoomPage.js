@@ -213,6 +213,7 @@ class RoomPage extends React.Component {
                 <InputComponent
                     onChangeProps={this.getCurrentRooms}
                     placeholder="start to search your team..."
+                    isBtn={false}
                 />
                 <BtnsContainer
                     showRooms={this.getRoomsBySorted}

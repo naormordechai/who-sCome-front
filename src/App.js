@@ -63,7 +63,7 @@ class App extends Component {
         <div className={classes.app}>
           <div className={classes.navbar}>
             <div>
-              <span onClick={this.x}>who'sCome?</span>
+              <span onClick={this.x}>who'sComing?</span>
             </div>
             <NavLink to="/" className={classes.navlink} exact activeClassName={classes.active}>Home</NavLink>
             {/* <NavLink to="/last five rooms" className={classes.navlink} exact activeClassName={classes.active}>Last 5 Rooms</NavLink> */}
