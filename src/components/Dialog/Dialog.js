@@ -38,7 +38,7 @@ const styles = {
         backgroundColor: 'rgb(47,94,133)',
         width: '50%',
         margin: '0 auto',
-        height:'23px',
+        height: '23px',
         borderRadius: '5px',
         '&:hover': {
             opacity: '.7'
@@ -84,7 +84,8 @@ class Dialog extends React.Component {
     }
 
     render() {
-        const { classes, yes, title, onCancel, onAccept, isCalender, topStyle, handlerCalenderDate, closeDialog, title1, action } = this.props
+        const { classes, yes, title, onCancel, onAccept, isCalender,
+            topStyle, handlerCalenderDate, title1, action } = this.props
         return (
             <div onClick={this.openRef} ref={e => this.containerRef = e} className={classes.container}>
                 <div className={classes.boxErrorPassword} style={{ top: topStyle }}>
@@ -95,11 +96,11 @@ class Dialog extends React.Component {
                             maxDetail="month"
                             maxDate={this.getMinMxaMonth().endMonth}
                         /></div> : <div>{title}</div>}
-                    <div style={{marginBottom:'15px'}} className={classes.tryAgain}>{onCancel}</div>
+                    <div style={{ marginBottom: '15px' }} className={classes.tryAgain}>{onCancel}</div>
                     {onAccept ? <div style={{ marginTop: '20px', background: 'red' }} className={classes.tryAgain} onClick={yes}>{onAccept}</div> : null}
-                    {title1 ? <div> 
-                    <div style={{color:'#fff', marginBottom:'10px'}}>{title1}</div>
-                    <button style={{border:'0', outline:'none', fontSize:'17px',color:'#fff'}} onClick={action} className={classes.tryAgain}>click here</button>
+                    {title1 ? <div>
+                        <div style={{ color: '#fff', marginBottom: '10px' }}>{title1}</div>
+                        <button style={{ border: '0', outline: 'none', fontSize: '17px', color: '#fff' }} onClick={action} className={classes.tryAgain}>click here</button>
                     </div> : null}
                 </div>
             </div>

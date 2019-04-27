@@ -392,4 +392,5 @@ const mapStateToDispatch = dispatch => {
     }
 }
 
-export default compose(connect(null, mapStateToDispatch), injectSheet(styles))(RoomDetails)
+export default compose(connect(null, mapStateToDispatch), injectSheet(styles)(RoomDetails))
+

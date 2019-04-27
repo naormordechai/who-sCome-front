@@ -52,6 +52,7 @@ const styles = {
         color: '#fff',
         textDecoration: 'none',
         borderBottom: '2px solid #000',
+        cursor:'pointer'
     },
 }
 

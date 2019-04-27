@@ -158,7 +158,7 @@ class roomPreview extends React.Component {
     }
 
     render() {
-        const { room, history, classes, subHeader } = this.props
+        const { room, history, classes, subHeader } = this.props;
         return (
             <div>
                 {this.renderPersons(room, classes, subHeader, history)}
